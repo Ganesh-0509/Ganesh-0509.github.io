@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { useSmoothScroll } from './lib/hooks'
 import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
@@ -18,7 +18,10 @@ export default function App() {
   useSmoothScroll()
 
   return (
-    <>
+    // The CSS prefers-reduced-motion block can't reach Framer Motion — its
+    // animations are JS-driven, so the timeline beam and every reveal still ran
+    // at full travel for readers who asked for less.
+    <MotionConfig reducedMotion="user">
       <AnimatePresence>
         {!loaded && <Preloader onDone={() => setLoaded(true)} />}
       </AnimatePresence>
@@ -35,6 +38,6 @@ export default function App() {
       </main>
       <Footer />
       <ChatBot />
-    </>
+    </MotionConfig>
   )
 }

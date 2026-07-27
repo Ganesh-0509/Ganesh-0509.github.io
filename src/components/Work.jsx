@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { projects } from '../data/content'
+import { getLenis } from '../lib/hooks'
 import Reveal from './Reveal'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -28,6 +29,12 @@ function ProjectCard({ p, n, onOpen }) {
 
       <div className="pcard-body">
         <h3 className="pcard-title">{p.title}</h3>
+        {/* The blurb was styled in App.css but never rendered — a visitor
+            scanning this grid saw four names and no idea what any of them are. */}
+        <p className="pcard-blurb">{p.blurb}</p>
+        <ul className="pcard-tech">
+          {p.tech.map((t) => <li key={t}>{t}</li>)}
+        </ul>
         <button type="button" className="pcard-link tlink tlink--accent" onClick={() => onOpen(p)}>
           Read the story <span className="arr">→</span>
         </button>
@@ -40,9 +47,16 @@ function StoryModal({ project, onClose }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
+
+    // `body.overflow` alone did nothing: Lenis drives the scroll, so the page
+    // kept moving behind the open modal (~900px of leak on one wheel gesture).
+    const lenis = getLenis()
+    lenis?.stop()
     document.body.style.overflow = 'hidden'
+
     return () => {
       window.removeEventListener('keydown', onKey)
+      lenis?.start()
       document.body.style.overflow = ''
     }
   }, [onClose])

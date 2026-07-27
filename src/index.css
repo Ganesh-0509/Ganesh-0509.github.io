@@ -1,34 +1,48 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   THEME — "Blush Editorial"  ·  a printed magazine, translated to screen
-   Pale-pink paper · cream base · light-brown washes · a dusty-rose accent
-   Typography is the design. Whitespace is a feature. Motion is barely there.
+   THEME — "Arachnid"  ·  Miles Morales: cool near-black, one arc-red accent
+   Display: Archivo Black · Body: IBM Plex Sans · Meta: JetBrains Mono
+
+   THE RULE THAT SHAPES THIS WHOLE FILE — there are two reds, not one:
+     --terra       #E5241E  saturated. FILLS, RAILS, DISPLAY TYPE, BORDERS only.
+     --terra-deep  #FF7A70  lifted.    ALL small text, links, labels.
+   The real Spider-Man reds fail as body text on black (Miles #E5241E = 4.22:1)
+   and saturated red on dark visually vibrates even where it passes. The lifted
+   red clears 7.59:1 and sits still. Never set body copy in --terra.
+
+   No pure black either — #0E0E11, because #000 causes halation and eye strain.
    ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Pale pink + cream paper, with a light-brown shade */
-  --paper: #f7e9e7;        /* pale blush-pink canvas */
-  --paper-2: #f1e3d3;      /* warm cream — faint sunken fill */
-  --card: #fdf7f4;         /* near-white — raised card fill, reads on both bands */
-  --brown: #cdb59a;        /* light brown / taupe — background washes */
-  --ink: #2a2320;          /* warm near-black — headlines & text */
-  --ink-2: #574b40;        /* secondary text */
-  --ink-3: #6f6356;        /* captions / muted — clears WCAG AA on paper */
+  /* Surfaces — elevation goes LIGHTER on dark, never darker */
+  --paper: #0e0e11;        /* page canvas */
+  --paper-2: #131318;      /* alternating band — one step up */
+  --card: #17171c;         /* raised card fill */
+  --brown: #2a2a33;        /* image placeholder / inert fill */
 
-  /* The one accent + the one structural line */
-  --terra: #b96a6a;        /* dusty rose — used sparingly, with intent */
-  --terra-deep: #97504f;   /* hover / pressed accent */
-  --ochre: #c79a6a;        /* soft ochre-brown hairline tint */
+  /* Text — inverted for dark */
+  --ink: #edebea;          /* primary   16.2:1 on paper */
+  --ink-2: #c2bebc;        /* secondary 11.2:1 */
+  --ink-3: #a6a2a0;        /* muted      7.6:1 */
 
-  --rule: rgba(42, 35, 32, 0.16);     /* default hairline */
-  --rule-soft: rgba(42, 35, 32, 0.09);
-  --ochre-rule: rgba(199, 154, 106, 0.55);
+  /* The one accent, in its two required forms */
+  --terra: #e5241e;        /* SATURATED — fills, rails, display em, borders */
+  /* LIFTED red for small accent text. Was #FF7A70, which measured hue 4° but
+     sat so high in lightness that it read as salmon/pink across the page —
+     it's on every link, chip, year and label, so the cast was everywhere.
+     #FF5C45 is hue 7°, visibly deeper, and still clears 6.30:1 on paper. */
+  --terra-deep: #ff5c45;
+  --ochre: #ff8a6b;        /* warm secondary tint */
+
+  --rule: rgba(255, 255, 255, 0.13);
+  --rule-soft: rgba(255, 255, 255, 0.06);
+  --ochre-rule: rgba(229, 36, 30, 0.5);   /* red hairline for hover borders */
 
   /* Type */
-  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --serif: 'Archivo Black', 'Arial Black', system-ui, sans-serif;  /* display */
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);   /* smooth, no overshoot */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --container: 1280px;
   --gutter: clamp(1.25rem, 5vw, 5rem);
   --section-pad: clamp(5rem, 13vh, 10rem);
@@ -37,41 +51,77 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html, body { overflow-x: clip; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 body {
   background-color: var(--paper);
-  /* a light-brown wash carried across the whole page, with blush-pink
-     glows at opposite corners so the page reads pink AND brown */
-  background-image:
-    radial-gradient(70% 55% at 0% 0%, rgba(247, 233, 231, 0.92) 0%, transparent 55%),
-    radial-gradient(70% 55% at 100% 100%, rgba(247, 233, 231, 0.85) 0%, transparent 55%),
-    linear-gradient(158deg, rgba(205, 181, 154, 0.48) 0%, rgba(205, 181, 154, 0.64) 46%, rgba(205, 181, 154, 0.50) 100%);
   color: var(--ink);
   font-family: var(--sans);
   font-weight: 400;
   font-size: 1.0625rem;
   line-height: 1.65;
-  overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Spider-Verse print texture ────────────────────────────────────────────────
+   Three things, not one, because that's what the film's look is actually made
+   of: Ben-Day halftone dots, diagonal hatching, and chromatic misregistration
+   (the cyan/magenta fringe you get when cheap comic printing plates don't line
+   up). A single grey dot-grid read as "square pattern" because that's what it
+   was — one evenly-spaced layer.
+
+   Layers here:
+     1  magenta dot plate
+     2  cyan dot plate, offset 2px  →  the misregistration
+     3  diagonal hatch, very faint  →  shadow tone
+
+   Sits ABOVE the content: behind it, every section's opaque background painted
+   straight over it. pointer-events:none so it never intercepts a click.
+   Do NOT apply this via `position: relative` on .chat-fab / .chat-panel /
+   .preloader / .story-overlay — those are position:fixed, and relative wins,
+   which drops them out of fixed positioning entirely. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  /* This layer blends OVER the text, so its strength is a legibility decision,
+     not just a taste one. Kept low deliberately. */
+  opacity: 0.34;
+  mix-blend-mode: overlay;
+  /* THE PINK CAST LIVED HERE. The first plate was rgba(255,60,90) — hue 351°,
+     which is rose, not red — spread across the entire viewport. Combined with
+     the cyan plate it averaged out to a mauve wash over everything, which is
+     why the page read pink rather than Spider-Man red.
+     Plate 1 is now a warm red (hue ~9°) and the cyan plate is dialled right
+     back: it only needs to hint at misregistration, not tint the page. */
+  background-image:
+    radial-gradient(circle at center, rgba(255, 74, 46, 0.30) 1.1px, transparent 1.5px),
+    radial-gradient(circle at center, rgba(80, 190, 255, 0.09) 1.1px, transparent 1.5px),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 6px);
+  background-size: 6px 6px, 6px 6px, 100% 100%;
+  background-position: 0 0, 2px 1px, 0 0;
 }
 
 /* ── Type ─────────────────────────────────────────────────────────────────── */
 h1, h2, h3, h4 {
   font-family: var(--serif);
-  font-weight: 380;
-  line-height: 1.0;
-  letter-spacing: -0.022em;
-  font-optical-sizing: auto;
+  font-weight: 400;              /* Archivo Black ships a single weight */
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
-em { font-style: italic; }
+em { font-style: normal; }       /* emphasis is colour here, not italic */
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; color: inherit; background: none; border: none; }
-::selection { background: var(--ink); color: var(--paper); }
+::selection { background: var(--terra); color: #fff; }
 
-/* Mono metadata label — the editorial "kicker" */
+/* Mono metadata label */
 .kicker {
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -79,36 +129,34 @@ button { font-family: inherit; color: inherit; background: none; border: none; }
   text-transform: uppercase;
   color: var(--ink-3);
 }
-/* terra-deep, not terra: small accent text must clear 4.5:1 AA on both bands */
 .kicker .idx { color: var(--terra-deep); }
 
-/* Big serif display */
+/* Big display */
 .display {
   font-family: var(--serif);
-  font-weight: 360;
-  font-size: clamp(2.9rem, 8.5vw, 8rem);
-  line-height: 0.96;
-  letter-spacing: -0.035em;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
-.display em { color: var(--terra); }
+.display em { color: var(--terra); }   /* large text — saturated red is safe */
 
 .section-title {
   font-family: var(--serif);
-  font-weight: 370;
-  font-size: clamp(2rem, 5vw, 3.6rem);
-  line-height: 1.02;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+  line-height: 1.06;
   letter-spacing: -0.025em;
-  max-width: 18ch;
+  max-width: 20ch;
 }
 .section-title em { color: var(--terra); }
 
-/* A magazine pull-quote */
 .lead {
   font-family: var(--serif);
-  font-weight: 340;
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
-  line-height: 1.28;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.24;
+  letter-spacing: -0.02em;
 }
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
@@ -118,35 +166,50 @@ button { font-family: inherit; color: inherit; background: none; border: none; }
 }
 .section { padding-block: var(--section-pad); position: relative; }
 
-/* Ultra-thin hairline rules — the structural grammar of the page */
 .rule { height: 1px; background: var(--rule); border: 0; width: 100%; }
 .rule--ochre { background: var(--ochre-rule); }
 
-/* The section header: kicker + chapter index over a hairline */
 .chapter {
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding-bottom: 1.2rem;
-  border-top: 1px solid var(--ink); /* one confident top rule per chapter */
+  border-top: 1px solid var(--rule);
   padding-top: 1rem;
 }
-/* line-height:1 so the index never drifts above/below the rule between sections */
 .chapter .kicker { line-height: 1; }
 
-/* Minimal text link with an animated underline */
+/* ── "Thwip" link ─────────────────────────────────────────────────────────────
+   Two lines, not one. ::before is a faint rail that is ALWAYS there, so the
+   link still reads as a link at rest — with only the animated line, links
+   looked like plain text and there was nothing to animate from. ::after is the
+   accent thread that shoots across it on hover. */
 .tlink {
   position: relative; font-weight: 500; font-size: 0.95rem;
   display: inline-flex; align-items: center; gap: 0.4rem;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
+  white-space: nowrap;
+  cursor: pointer;
 }
+.tlink::before,
 .tlink::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
-  background: currentColor; transform: scaleX(1); transform-origin: left;
-  transition: transform 0.45s var(--ease);
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
 }
-.tlink:hover::after { transform: scaleX(0); transform-origin: right; }
+.tlink::before { background: currentColor; opacity: 0.28; }
+.tlink::after {
+  background: currentColor;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tlink:hover::after, .tlink:focus-visible::after { transform: scaleX(1); }
 .tlink--accent { color: var(--terra-deep); }
-.tlink .arr { transition: transform 0.4s var(--ease); }
+.tlink .arr { transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1); }
 .tlink:hover .arr { transform: translateX(4px); }
+
+/* ── Focus — instant, always visible ──────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--terra-deep);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 
 /* Utility */
 .serif { font-family: var(--serif); }

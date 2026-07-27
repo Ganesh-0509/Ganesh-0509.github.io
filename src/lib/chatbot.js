@@ -9,9 +9,13 @@ const has = (t, ...words) => words.some((w) => t.includes(w))
 
 // Keyword aliases so "moon", "lunar", "credit", etc. resolve to the right project.
 const ALIASES = {
-  'CampusSync Edge': ['campussync', 'campus', 'career', 'resume platform', 'matching'],
-  'Namma Connect': ['namma', 'connect', 'ngo', 'volunteer', 'community', 'field', 'allocation', 'escalation'],
-  JanaNaadi: ['jananaadi', 'jana', 'sentiment', 'civic', 'ward', 'public', 'knowledge graph'],
+  Jobyn: ['jobyn', 'campussync', 'campus', 'career', 'resume platform', 'matching'],
+  // 'connect' and 'public' removed: project matching runs before the contact
+  // intent, so "how can I connect with him" returned the NGO platform and
+  // "does he do public speaking" returned JanaNaadi. Both are still reachable
+  // by their own names.
+  'Namma Connect': ['namma', 'ngo', 'volunteer', 'community', 'allocation', 'escalation'],
+  JanaNaadi: ['jananaadi', 'jana', 'sentiment', 'civic', 'ward', 'knowledge graph'],
   'ISRO HAVK': ['isro', 'havk', 'lunar', 'moon', 'terrain', 'space', 'rover', 'satellite'],
   'Bias-Lab': ['bias', 'bias-lab', 'fairness', 'shap', 'fairlearn', 'audit', 'ethics', 'explainability'],
   FinMate: ['finmate', 'finance', 'budget', 'budgeting', 'expense', 'expenses', 'money', 'spending', 'fintech', 'co-pilot'],
@@ -19,10 +23,18 @@ const ALIASES = {
 
 const linkFor = (name) => socials.find((s) => s.name === name)?.url
 
+// Words that sit inside a project title but are far more likely to be the
+// visitor asking something general. Without this, "Namma Connect" donates
+// "connect" back as an implicit alias and swallows "how can I connect".
+const TITLE_STOPWORDS = new Set(['connect', 'lab', 'work', 'about', 'contact'])
+
 function findProject(t) {
   return projects.find((p) => {
     const aliases = ALIASES[p.title] || []
-    const words = p.title.toLowerCase().split(/\s+/).filter((w) => w.length > 3)
+    const words = p.title
+      .toLowerCase()
+      .split(/[\s-]+/)
+      .filter((w) => w.length > 3 && !TITLE_STOPWORDS.has(w))
     return [...aliases, ...words].some((k) => t.includes(k))
   })
 }
@@ -78,7 +90,9 @@ export function getAnswer(raw) {
   if (has(t, 'achiev', 'win', 'award', 'hackathon', 'accomplish', 'proud', 'highlight', 'finalist', 'leetcode'))
     return {
       text:
-        wins.map((w) => `${w.emoji} ${w.title} — ${w.detail} (${w.year})`).join('\n') +
+        // was `w.emoji` — a key that doesn't exist on these objects, so every
+        // line rendered as "undefined Top 12 · Intel AI Hackathon 2025 — …"
+        wins.map((w) => `${w.medal} ${w.title} — ${w.detail} (${w.year})`).join('\n') +
         '\n🧩 70+ LeetCode problems solved.',
       chips: ['His projects', 'Hire / contact'],
     }

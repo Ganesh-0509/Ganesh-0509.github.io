@@ -10,12 +10,26 @@ function CloseIcon() {
     </svg>
   )
 }
-// Custom four-point "spark" mark — reads as AI, fits the terracotta palette.
+// Mask mark — the silhouette and the two lenses, plus a few web strands.
+// Drawn as geometry rather than using Marvel artwork, which would be someone
+// else's copyright on a public site.
 function SparkIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
-      <path d="M12 1.5c.45 4.2 1.8 6.6 5 8.5-3.2 1.9-4.55 4.3-5 8.5-.45-4.2-1.8-6.6-5-8.5 3.2-1.9 4.55-4.3 5-8.5z" />
-      <circle cx="19" cy="4.5" r="1.4" />
+    <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+      {/* mask silhouette */}
+      <path
+        d="M16 3c6.2 0 10.4 3.4 10.4 8.6 0 5.6-4 12-7.2 15.3a4.6 4.6 0 0 1-6.4 0C9.6 23.6 5.6 17.2 5.6 11.6 5.6 6.4 9.8 3 16 3Z"
+        fill="currentColor"
+      />
+      {/* web strands across the brow */}
+      <g stroke="rgba(14,14,17,0.55)" strokeWidth="0.7" fill="none" strokeLinecap="round">
+        <path d="M16 3.6v9M8 6.6l8 6M24 6.6l-8 6M6.2 12.4 16 12.6M25.8 12.4 16 12.6" />
+        <path d="M10.2 5.6C13 7.4 19 7.4 21.8 5.6M7.4 8.8C11 11 21 11 24.6 8.8" />
+      </g>
+      {/* lenses */}
+      <path d="M13.4 10.6c-1.3-1.6-4.2-2.3-5.6-1.3-1.2.9-.5 3.1.9 4.3 1.6 1.4 4 1.3 4.9.2.7-.9.5-2.3-.2-3.2Z" fill="#0e0e11" />
+      <path d="M18.6 10.6c1.3-1.6 4.2-2.3 5.6-1.3 1.2.9.5 3.1-.9 4.3-1.6 1.4-4 1.3-4.9.2-.7-.9-.5-2.3.2-3.2Z" fill="#0e0e11" />
+      <path d="M12.6 10.9c-1-1.1-3.1-1.6-4.1-.9-.9.6-.4 2.2.6 3.1" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.8" strokeLinecap="round" />
     </svg>
   )
 }

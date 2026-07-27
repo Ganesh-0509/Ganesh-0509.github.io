@@ -17,7 +17,10 @@ export const profile = {
   roles: ['Agentic AI Engineer', 'RAG & LLM Systems', 'Full-Stack Builder', 'Problem Solver'],
   // Short, warm one-liner under the headline.
   tagline:
-    "AI/ML engineer at Saveetha (CGPA 8.2) building agentic systems, RAG pipelines, and LLM-powered apps. Intel AI Hackathon 2025 winner — 1st of 90+ teams. Chasing agentic / finance-AI internships.",
+    // Was "Intel AI Hackathon 2025 winner — 1st of 90+ teams", which contradicted
+    // the Highlights section ("Top 12") lower down the same page. Top 12 is the
+    // true result, so the claim now matches everywhere.
+    'AI/ML engineer at Saveetha (CGPA 8.2) building agentic systems, RAG pipelines, and LLM-powered apps. Top 12 nationally at the Intel AI Hackathon 2025, out of 90+ teams. Chasing agentic / finance-AI internships.',
   location: 'Chennai, Tamil Nadu, India',
   email: 'ganesh957kumar@gmail.com',
   // Confirmed by Ganesh (2026-06-17).
@@ -31,7 +34,7 @@ export const profile = {
 export const about = {
   story: [
     "I don't just study AI — I build with it. As a second-year AI/ML engineer at Saveetha Engineering College (CGPA 8.2), I build agentic AI systems, RAG pipelines, and LLM-powered applications that solve real problems — not academic exercises.",
-    "My work runs on multi-agent orchestration, PGVector RAG with Gemini embeddings, and production workflows with self-reflection loops — Python, FastAPI, React, and the Gemini / OpenAI / Claude APIs. I won the Intel AI Hackathon 2025 (1st of 90+ teams) building a multimodal agentic RAG system. Now I'm looking to contribute to agentic and finance-AI workflows from day one.",
+    "My work runs on multi-agent orchestration, PGVector RAG with Gemini embeddings, and production workflows with self-reflection loops — Python, FastAPI, React, and the Gemini / OpenAI / Claude APIs. I placed in the top 12 nationally at the Intel AI Hackathon 2025, out of 90+ teams, building a multimodal agentic RAG system. Now I'm looking to contribute to agentic and finance-AI workflows from day one.",
   ],
   stats: [
     { label: 'LeetCode solved', value: 70, suffix: '+' },
@@ -73,11 +76,11 @@ export const skills = [
 
 export const projects = [
   {
-    title: 'CampusSync Edge',
+    title: 'Jobyn',
     blurb:
       'Full-stack AI platform with a production RAG pipeline (Gemini embeddings + PGVector + Redis), hallucination detection, and a RandomForest classifier (82.1% F1) exported to ONNX for edge inference.',
     story: [
-      'Campuses run on scattered systems — notices, schedules, records — and getting a straight answer means hunting through all of them. CampusSync Edge folds that into one assistant you can just ask.',
+      'Campuses run on scattered systems — notices, schedules, records — and getting a straight answer means hunting through all of them. Jobyn folds that into one assistant you can just ask.',
       'Under the hood it is a production RAG pipeline: Gemini embeddings stored in PGVector, Redis caching the hot paths, and a hallucination-detection layer that keeps answers grounded in real sources. A RandomForest classifier (82.1% F1) is exported to ONNX so the lighter inference can run at the edge, close to the user.',
     ],
     tags: ['AI/ML', 'Full Stack'],
@@ -85,7 +88,7 @@ export const projects = [
     tone: 'coral',
     image: asset('campusSync.png'),
     repo: 'https://github.com/Ganesh-0509/Campus-Sync-Edge-Ai',
-    demo: '',
+    demo: 'https://jobyn.pages.dev',
     featured: true,
   },
   {
@@ -163,31 +166,103 @@ export const projects = [
   },
 ]
 
-// "Wins" / receipts — proud moments (2025). Image-topped cards.
+// "Wins" / receipts — rendered as a centre-rail timeline, newest first.
+//
+// `date` (YYYY-MM) is what the timeline sorts on; `year` is only the label.
+// Without it the entries rendered in array order and the timeline read
+// May 25 → Oct 25 → Nov 25 → Jun 26 → Apr 26 → Jul 26, which is not a timeline.
+//
+// Emoji note: avoid flag emoji (🇮🇳). Windows ships no flag glyphs, so it
+// renders as the letters "IN" instead of an icon.
 export const wins = [
   {
-    title: 'Top 12 · Intel AI Hackathon 2025',
+    title: 'National Finalist · India Innovates 2026',
     chip: 'Hackathon',
-    medal: '🥇',
-    detail: 'National recognition + ₹25,000 for Enterprise360, an AI assistant for unified enterprise insights.',
-    year: 'May 2025',
-    image: asset('win-intel.png'),
+    medal: '🏛️',
+    linkedinUrl: '',   // paste the post URL → a "Read the post ↗" link appears
+    detail: 'Presented JanaNaadi — multilingual sentiment across 22+ Indian languages, 35 APIs, 615+ entries spanning 28 states.',
+    year: 'Jul 2026',
+    date: '2026-07',
   },
   {
-    title: 'Winner · VIT Symposium',
-    chip: 'Symposium',
-    medal: '💰',
-    detail: 'Presented FinMate and took home ₹10,000 for a practical, problem-first finance assistant.',
+    title: 'Top 106 · Google Solution Challenge 2026',
+    chip: 'Build with AI',
+    medal: '🌍',
+    linkedinUrl: '',
+    detail: 'Bias-Lab placed in the top 106 out of 85,000+ registrations and 6,700+ prototype submissions.',
+    year: 'Jun 2026',
+    date: '2026-06',
+  },
+  {
+    title: 'Offline Round · HackHustle 2.0',
+    chip: 'Hackathon',
+    medal: '⏱️',
+    linkedinUrl: '',
+    detail: 'One of 63 teams through to the 24-hour offline round from 4,500+ registrations and 1,000+ teams.',
+    year: 'Jun 2026',
+    date: '2026-06',
+  },
+  {
+    title: 'Top 30 · Caterpillar Tech Challenge 2026',
+    chip: 'Challenge',
+    medal: '⚙️',
+    linkedinUrl: '',
+    detail: 'Team MechBusters advanced to Round 2 out of 1,500+ teams, into a mentor round with Caterpillar engineers.',
+    year: 'Apr 2026',
+    date: '2026-04',
+  },
+  {
+    title: 'LeetCode 100 Days Badge 2025',
+    chip: 'Consistency',
+    medal: '🧩',
+    linkedinUrl: '',
+    detail: '100+ consecutive days of problem solving alongside coursework and shipping projects.',
+    year: 'Jan 2026',
+    date: '2026-01',
+  },
+  {
+    title: 'Oracle Certified · Java',
+    chip: 'Certification',
+    medal: '📜',
+    linkedinUrl: '',
+    detail: 'Oracle Java certification — core language, OOP, and industry-standard coding practice.',
+    year: 'Dec 2025',
+    date: '2025-12',
+  },
+  {
+    title: 'National Finalist · OpenAI × NxtWave',
+    chip: 'Buildathon',
+    medal: '🚀',
+    linkedinUrl: '',
+    // Was "now heading to the National round" — the Delhi round has happened.
+    detail: 'First finalists from the Tamil Nadu region with Sahaay-AI, then represented the region at the national round at the India AI Impact Summit in Delhi.',
+    year: 'Nov 2025',
+    date: '2025-11',
+    image: asset('win-nxtwave.jpg'),
+  },
+  {
+    // Was "Winner · VIT Symposium". The LinkedIn post for this event
+    // (VOID V1'25, Team Sparklers, ₹10,000) says Second Runner-Up.
+    title: 'Second Runner-Up · VOID V1’25, VIT',
+    chip: 'Hackathon',
+    medal: '🏆',
+    linkedinUrl: '',
+    detail: 'Top 25 of 90 teams, then Second Runner-Up and ₹10,000 for FinMate — a practical, problem-first finance assistant. Our first 24-hour hackathon.',
     year: 'Oct 2025',
+    date: '2025-10',
     image: asset('win-vit.jpg'),
   },
   {
-    title: 'Finalist · OpenAI × NxtWave',
-    chip: 'Buildathon',
-    medal: '🚀',
-    detail: 'Top 10 in the Tamil Nadu regionals with Sahaay-AI — now heading to the National round.',
-    year: 'Nov 2025',
-    image: asset('win-nxtwave.jpg'),
+    title: 'Top 12 · Intel AI Hackathon 2025',
+    chip: 'Hackathon',
+    // was 🥇 — a gold medal on a top-12 finish repeated the same overstatement
+    // the hero used to make.
+    medal: '🏅',
+    linkedinUrl: '',
+    detail: 'National recognition + ₹25,000 for Enterprise360, an AI assistant for unified enterprise insights.',
+    year: 'May 2025',
+    date: '2025-05',
+    image: asset('win-intel.png'),
   },
 ]
 
