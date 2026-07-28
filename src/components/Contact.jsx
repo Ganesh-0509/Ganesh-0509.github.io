@@ -122,8 +122,8 @@ export default function Contact({ onResume }) {
             </Reveal>
             <Reveal delay={0.06}>
               <p className="section-lead muted">
-                {profile.availability}. Open to agentic AI, applied ML and backend
-                work — and always up for a good systems conversation.
+                Agentic AI, applied ML and backend work — and always up for a
+                good systems conversation.
               </p>
             </Reveal>
 

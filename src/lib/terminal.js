@@ -36,7 +36,6 @@ const COMMANDS = {
       line(profile.summary),
       line(''),
       line(`${pad('location')}${profile.location}`, 'dim'),
-      line(`${pad('status')}${profile.availability}`, 'dim'),
     ],
   },
 
@@ -85,8 +84,6 @@ const COMMANDS = {
       link(`  email      ${profile.email}`, `mailto:${profile.email}`),
       link('  github     github.com/Ganesh-0509', profile.github),
       link('  linkedin   /in/ganesh-kumar-957t', profile.linkedin),
-      line(''),
-      line(profile.availability, 'ok'),
     ],
   },
 

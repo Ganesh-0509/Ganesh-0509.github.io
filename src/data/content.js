@@ -30,7 +30,9 @@ export const profile = {
   // No adjectives, no award inflation — the Highlights section carries placings.
   summary:
     'I build agentic AI systems and retrieval pipelines that reach production — multi-agent orchestration, PGVector RAG with Gemini embeddings, and ONNX-exported models served at the edge. One of them shipped as an official template in Lamatic AgentKit; the rest are linked below with the code.',
-  availability: 'Open to AI / ML & backend roles — internship or full-time',
+  // No `availability` line. An "open to work" banner dates itself the moment it
+  // ships and reads as asking rather than showing. The work makes the case; the
+  // Contact section is where someone acts on it.
   location: 'Chennai, Tamil Nadu, India',
   email: 'ganesh957kumar@gmail.com',
   phone: '+91 78250 83996',

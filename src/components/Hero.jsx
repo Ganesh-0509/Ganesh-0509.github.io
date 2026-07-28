@@ -19,11 +19,6 @@ export default function Hero({ loaded, onResume }) {
     <section id="home" className="hero">
       <div className="container hero-inner">
         <div className="hero-lede">
-          <motion.div className="hero-status" {...rise(0.08)}>
-            <span className="hero-status-dot" aria-hidden="true" />
-            <span className="mono">{profile.availability}</span>
-          </motion.div>
-
           <motion.h1 className="display hero-title" {...rise(0.16)}>
             {profile.headline.split('&')[0].trim()} <em>&amp;</em>
             <br />
