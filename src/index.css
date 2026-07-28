@@ -2,6 +2,14 @@
    THEME — "Blush Editorial"  ·  a printed magazine, translated to screen
    Pale-pink paper · cream base · light-brown washes · a dusty-rose accent
    Typography is the design. Whitespace is a feature. Motion is barely there.
+
+   CONTRAST (measured against --paper #f7e9e7):
+     --ink        #2a2320  → 11.9:1   AAA  (headlines, body)
+     --ink-2      #574b40  →  6.6:1   AA   (secondary prose, AAA at large sizes)
+     --ink-3      #6f6356  →  4.5:1   AA   (captions/labels — never body copy)
+     --terra-deep #97504f  →  5.3:1   AA   (small accent text, links)
+     --terra      #b96a6a  →  3.5:1        (LARGE text + non-text UI only)
+   Rule: any accent text under 24px uses --terra-deep, never --terra.
    ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -9,6 +17,7 @@
   --paper: #f7e9e7;        /* pale blush-pink canvas */
   --paper-2: #f1e3d3;      /* warm cream — faint sunken fill */
   --card: #fdf7f4;         /* near-white — raised card fill, reads on both bands */
+  --card-2: #f6ece7;       /* nested fill — inputs, badges */
   --brown: #cdb59a;        /* light brown / taupe — background washes */
   --ink: #2a2320;          /* warm near-black — headlines & text */
   --ink-2: #574b40;        /* secondary text */
@@ -16,27 +25,49 @@
 
   /* The one accent + the one structural line */
   --terra: #b96a6a;        /* dusty rose — used sparingly, with intent */
-  --terra-deep: #97504f;   /* hover / pressed accent */
+  --terra-deep: #97504f;   /* hover / pressed accent, and ALL small accent text */
   --ochre: #c79a6a;        /* soft ochre-brown hairline tint */
+  --sage-deep: #5f7050;    /* success / positive state, AA on paper */
 
   --rule: rgba(42, 35, 32, 0.16);     /* default hairline */
   --rule-soft: rgba(42, 35, 32, 0.09);
   --ochre-rule: rgba(199, 154, 106, 0.55);
 
+  /* The terminal is a deliberate dark panel — a code block on paper.
+     Warm ink, not cold black, so it stays on-palette. */
+  --term-bg: #241e1b;
+  --term-bar: #2f2724;
+  --term-text: #e8ded6;
+  --term-dim: #a4968a;
+  --term-accent: #e0a3a0;
+  --term-ok: #a8bf94;
+
   /* Type */
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);   /* smooth, no overshoot */
   --container: 1280px;
   --gutter: clamp(1.25rem, 5vw, 5rem);
-  --section-pad: clamp(5rem, 13vh, 10rem);
+  /* Generous vertical rhythm — ~6rem minimum, so sections breathe */
+  --section-pad: clamp(6rem, 13vh, 10rem);
+  --radius: 18px;
+  --radius-sm: 12px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Clip at the root, not just on body. The off-canvas mobile nav (translated
+     100% to the right) and the hidden badge tooltips both sit outside the
+     viewport; `clip` stops them creating scrollable overflow without turning
+     the root into a scroll container the way `hidden` would. */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
@@ -53,7 +84,9 @@ body {
   font-weight: 400;
   font-size: 1.0625rem;
   line-height: 1.65;
+  /* Belt and braces against horizontal overflow on mobile. */
   overflow-x: hidden;
+  overflow-x: clip;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -61,15 +94,25 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--serif);
   font-weight: 380;
-  line-height: 1.0;
+  line-height: 1.06;
   letter-spacing: -0.022em;
   font-optical-sizing: auto;
+  /* Long project titles must never push a card wider than its column. */
+  overflow-wrap: break-word;
 }
 em { font-style: italic; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; color: inherit; background: none; border: none; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
 ::selection { background: var(--ink); color: var(--paper); }
+
+/* Visible keyboard focus everywhere — never remove without replacing. */
+:focus-visible {
+  outline: 2px solid var(--terra-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 
 /* Mono metadata label — the editorial "kicker" */
 .kicker {
@@ -78,19 +121,18 @@ button { font-family: inherit; color: inherit; background: none; border: none; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink-3);
+  font-weight: 500;
 }
-/* terra-deep, not terra: small accent text must clear 4.5:1 AA on both bands */
-.kicker .idx { color: var(--terra-deep); }
 
 /* Big serif display */
 .display {
   font-family: var(--serif);
   font-weight: 360;
-  font-size: clamp(2.9rem, 8.5vw, 8rem);
-  line-height: 0.96;
+  font-size: clamp(2.6rem, 6.5vw, 5.6rem);
+  line-height: 0.98;
   letter-spacing: -0.035em;
 }
-.display em { color: var(--terra); }
+.display em { color: var(--terra); font-style: italic; }
 
 .section-title {
   font-family: var(--serif);
@@ -98,7 +140,7 @@ button { font-family: inherit; color: inherit; background: none; border: none; }
   font-size: clamp(2rem, 5vw, 3.6rem);
   line-height: 1.02;
   letter-spacing: -0.025em;
-  max-width: 18ch;
+  max-width: 20ch;
 }
 .section-title em { color: var(--terra); }
 
@@ -120,39 +162,134 @@ button { font-family: inherit; color: inherit; background: none; border: none; }
 
 /* Ultra-thin hairline rules — the structural grammar of the page */
 .rule { height: 1px; background: var(--rule); border: 0; width: 100%; }
-.rule--ochre { background: var(--ochre-rule); }
 
-/* The section header: kicker + chapter index over a hairline */
+/* The section header: kicker over a hairline */
 .chapter {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; padding-bottom: 1.2rem;
-  border-top: 1px solid var(--ink); /* one confident top rule per chapter */
-  padding-top: 1rem;
+  gap: 1rem; padding: 1rem 0 1.2rem;
+  border-top: 1px solid var(--ink);
+  margin-bottom: clamp(1.6rem, 4vh, 2.4rem);
 }
-/* line-height:1 so the index never drifts above/below the rule between sections */
+/* line-height:1 so the label never drifts above/below the rule */
 .chapter .kicker { line-height: 1; }
+
+/* Shared section intro paragraph */
+.section-lead {
+  margin-top: 1rem; max-width: 58ch;
+  font-size: 1.02rem; line-height: 1.68;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+/* Shared shape. Transform-only on hover so nothing triggers layout. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  padding: 0.8rem 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.92rem; font-weight: 500; letter-spacing: -0.005em;
+  border-radius: 999px; cursor: pointer;
+  border: 1px solid transparent;
+  /* 44px min target — comfortable on touch */
+  min-height: 44px;
+  transition: transform .3s var(--ease), background-color .3s var(--ease),
+              border-color .3s var(--ease), color .3s var(--ease);
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn--primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn--primary:hover { background: var(--terra-deep); border-color: var(--terra-deep); }
+
+.btn--ghost {
+  background: var(--card); color: var(--ink);
+  border-color: var(--rule);
+}
+.btn--ghost:hover { border-color: var(--terra); color: var(--terra-deep); }
+
+/* Icon-only social button */
+.btn--icon { width: 44px; height: 44px; padding: 0; border-radius: 50%; }
+
+.btn .arr { transition: transform .3s var(--ease); }
+.btn:hover .arr { transform: translateX(3px); }
 
 /* Minimal text link with an animated underline */
 .tlink {
-  position: relative; font-weight: 500; font-size: 0.95rem;
+  position: relative; font-weight: 500; font-size: 0.92rem;
   display: inline-flex; align-items: center; gap: 0.4rem;
-  padding-bottom: 2px;
+  padding-bottom: 2px; cursor: pointer;
+  transition: color .3s var(--ease);
 }
 .tlink::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
   background: currentColor; transform: scaleX(1); transform-origin: left;
-  transition: transform 0.45s var(--ease);
+  transition: transform .45s var(--ease);
 }
 .tlink:hover::after { transform: scaleX(0); transform-origin: right; }
 .tlink--accent { color: var(--terra-deep); }
-.tlink .arr { transition: transform 0.4s var(--ease); }
+.tlink .arr { transition: transform .4s var(--ease); }
 .tlink:hover .arr { transform: translateX(4px); }
 
-/* Utility */
+/* ── Tech badge + tooltip ─────────────────────────────────────────────────────
+   Pure-CSS popover driven by data-tip. No JS, no state, no re-render — the
+   tooltip is a compositor-only opacity/transform change. */
+.badge {
+  position: relative;
+  display: inline-flex; align-items: center;
+  font-family: var(--mono); font-size: 0.73rem; font-weight: 500;
+  letter-spacing: 0.005em; line-height: 1;
+  padding: 0.42rem 0.66rem;
+  color: var(--ink-2);
+  background: var(--card-2);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  cursor: default;
+  transition: color .25s var(--ease), border-color .25s var(--ease), background-color .25s var(--ease);
+}
+.badge:hover, .badge:focus-visible {
+  color: var(--terra-deep); border-color: var(--terra); background: var(--card);
+}
+
+.badge[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 9px); left: 50%;
+  width: max-content; max-width: 15rem;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+  line-height: 1.45; letter-spacing: 0; text-align: left;
+  color: var(--paper); background: var(--ink);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px -14px rgba(42, 35, 32, 0.7);
+  opacity: 0; transform: translate(-50%, 4px);
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+  pointer-events: none; z-index: 40;
+}
+.badge[data-tip]:hover::after,
+.badge[data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+
+/* Tooltips on the edge badges would clip at the container edge — nudge them in. */
+.badge[data-tip]:first-child::after { left: 0; transform: translate(0, 4px); }
+.badge[data-tip]:first-child:hover::after,
+.badge[data-tip]:first-child:focus-visible::after { transform: translate(0, 0); }
+.badge[data-tip]:last-child::after { left: auto; right: 0; transform: translate(0, 4px); }
+.badge[data-tip]:last-child:hover::after,
+.badge[data-tip]:last-child:focus-visible::after { transform: translate(0, 0); }
+
+/* Touch devices have no hover: suppress the popover rather than let it stick. */
+@media (hover: none) {
+  .badge[data-tip]::after { display: none; }
+}
+
+/* ── Utilities ────────────────────────────────────────────────────────────── */
 .serif { font-family: var(--serif); }
 .mono { font-family: var(--mono); }
-.muted { color: var(--ink-3); }
+.muted { color: var(--ink-2); }
+.dim { color: var(--ink-3); }
 .terra { color: var(--terra-deep); }
+.accent { color: var(--terra); }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

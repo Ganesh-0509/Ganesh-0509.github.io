@@ -41,6 +41,29 @@ export function scrollToId(id) {
   else el.scrollIntoView({ behavior: 'smooth' })
 }
 
+// ── Minimal hash router ──────────────────────────────────────────────────────
+// The site is a single Vite entry with no router dependency. Routes are hash
+// paths (`#/projects`), which keeps deep links working on GitHub Pages without
+// any server rewrite rules. Section anchors use scrollToId + preventDefault, so
+// they never write to the hash and never collide with a route.
+export function useHashRoute() {
+  const [route, setRoute] = useState(() => window.location.hash)
+  useEffect(() => {
+    const onChange = () => setRoute(window.location.hash)
+    window.addEventListener('hashchange', onChange)
+    return () => window.removeEventListener('hashchange', onChange)
+  }, [])
+  return route
+}
+
+// True when the hash points at a standalone page rather than a section anchor.
+export const isRoute = (hash) => hash.startsWith('#/')
+
+export function navigate(hash) {
+  if (window.location.hash === hash) return
+  window.location.hash = hash
+}
+
 // Tracks which section is currently in view for nav highlighting.
 export function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0])

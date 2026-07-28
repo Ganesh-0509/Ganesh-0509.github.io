@@ -1,80 +1,107 @@
 import { motion } from 'framer-motion'
 import { profile } from '../data/content'
 import { scrollToId } from '../lib/hooks'
+import { GithubIcon, LinkedinIcon, DownloadIcon } from './Icons'
+import TextGenerate from './TextGenerate'
+import Terminal from './Terminal'
 
 const EASE = [0.22, 1, 0.36, 1]
 
-export default function Hero({ loaded }) {
-  // Editorial reveal: opacity + a small rise, staggered. No spring, no bounce.
+export default function Hero({ loaded, onResume }) {
+  // opacity + a short rise, staggered. Both compositor properties.
   const rise = (delay) => ({
-    initial: { opacity: 0, y: 18 },
-    animate: loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
-    transition: { delay, duration: 0.9, ease: EASE },
+    initial: { opacity: 0, y: 16 },
+    animate: loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+    transition: { delay, duration: 0.7, ease: EASE },
   })
 
   return (
     <section id="home" className="hero">
-      <div className="container">
-        {/* masthead meta line */}
-        <motion.div className="hero-meta" {...rise(0.1)}>
-          <span className="kicker">AI Engineer — BTech ’28</span>
-          <span className="kicker">{profile.location} · 2026</span>
-        </motion.div>
-        <motion.hr className="rule" {...rise(0.15)} />
+      <div className="container hero-inner">
+        <div className="hero-lede">
+          <motion.div className="hero-status" {...rise(0.08)}>
+            <span className="hero-status-dot" aria-hidden="true" />
+            <span className="mono">{profile.availability}</span>
+          </motion.div>
 
-        <div className="hero-grid">
-          <div className="hero-lede">
-            <motion.h1 className="display hero-title" {...rise(0.25)}>
-              I don’t just study&nbsp;AI<span className="hero-period">.</span>
-              <br />I <em>build</em> with&nbsp;it.
-            </motion.h1>
+          <motion.h1 className="display hero-title" {...rise(0.16)}>
+            {profile.headline.split('&')[0].trim()} <em>&amp;</em>
+            <br />
+            {profile.headline.split('&')[1].trim()}
+          </motion.h1>
 
-            <motion.p className="hero-tagline" {...rise(0.4)}>
-              {profile.tagline}
-            </motion.p>
+          <motion.p className="hero-specialisms mono" {...rise(0.24)}>
+            {profile.specialisms.map((s, i) => (
+              <span key={s}>
+                {i > 0 && <span className="hero-sep" aria-hidden="true">·</span>}
+                {s}
+              </span>
+            ))}
+          </motion.p>
 
-            <motion.div className="hero-roles" {...rise(0.5)}>
-              {profile.roles.join('  /  ')}
-            </motion.div>
+          {/* Word-by-word blur-in — the summary is the one block of prose long
+              enough for the effect to read as writing rather than flicker. */}
+          <TextGenerate
+            className="hero-summary"
+            words={profile.summary}
+            start={loaded}
+            delay={0.34}
+          />
 
-            <motion.div className="hero-actions" {...rise(0.58)}>
-              <button className="tlink tlink--accent" onClick={() => scrollToId('work')}>
-                Selected work <span className="arr">→</span>
-              </button>
-              <a className="tlink" href={profile.resumeUrl} target="_blank" rel="noreferrer">
-                Résumé <span className="arr">↗</span>
+          {/* Above the fold, in priority order: see the work, take the CV, find me. */}
+          <motion.div className="hero-actions" {...rise(0.4)}>
+            <button
+              type="button"
+              className="btn btn--primary"
+              onClick={() => scrollToId('work')}
+            >
+              View Projects <span className="arr" aria-hidden="true">→</span>
+            </button>
+
+            <a
+              className="btn btn--ghost"
+              href={profile.resumeUrl}
+              download="Ganesh_Kumar_Resume.pdf"
+              onClick={(e) => {
+                // Prefer the in-page preview; the href stays as the no-JS fallback.
+                if (onResume) { e.preventDefault(); onResume() }
+              }}
+            >
+              <DownloadIcon /> Download Resume
+            </a>
+
+            <div className="hero-socials">
+              <a
+                className="btn btn--ghost btn--icon"
+                href={profile.github}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub profile"
+              >
+                <GithubIcon />
               </a>
-            </motion.div>
-          </div>
-
-          {/* portrait as an editorial figure */}
-          <motion.figure
-            className="hero-figure"
-            initial={{ opacity: 0, y: 24 }}
-            animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-            transition={{ delay: 0.35, duration: 1, ease: EASE }}
-          >
-            <div className="hero-portrait">
-              {profile.photo
-                ? <img src={profile.photo} alt={profile.name} />
-                : <div className="hero-portrait-ph" />}
+              <a
+                className="btn btn--ghost btn--icon"
+                href={profile.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn profile"
+              >
+                <LinkedinIcon />
+              </a>
             </div>
-            <figcaption className="kicker">
-              {profile.name} — Chennai
-            </figcaption>
-          </motion.figure>
+          </motion.div>
         </div>
-      </div>
 
-      <motion.button
-        className="hero-scroll kicker"
-        onClick={() => scrollToId('about')}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loaded ? 1 : 0 }}
-        transition={{ delay: 1, duration: 1 }}
-      >
-        Scroll ↓
-      </motion.button>
+        <motion.div
+          className="hero-term"
+          initial={{ opacity: 0, y: 22 }}
+          animate={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+          transition={{ delay: 0.34, duration: 0.8, ease: EASE }}
+        >
+          <Terminal onResume={onResume} />
+        </motion.div>
+      </div>
     </section>
   )
 }

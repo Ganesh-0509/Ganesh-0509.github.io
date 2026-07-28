@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
-// Editorial preloader: the name set in serif, a count, and a single hairline
-// that draws across the page — then the whole sheet lifts away.
+// Boot screen: the name, a counter, and a single accent bar that fills —
+// then the whole sheet lifts away. The bar is driven by transform: scaleX,
+// so the progress animation never triggers layout.
 export default function Preloader({ onDone }) {
   const [count, setCount] = useState(0)
 
@@ -31,7 +32,7 @@ export default function Preloader({ onDone }) {
       aria-hidden="true"
     >
       <div className="preloader-row">
-        <span className="preloader-name serif">Ganesh Kumar T</span>
+        <span className="preloader-name">Ganesh Kumar T</span>
         <span className="preloader-count mono">{String(count).padStart(3, '0')}</span>
       </div>
       <div className="preloader-bar"><div className="preloader-bar-fill" style={{ transform: `scaleX(${count / 100})` }} /></div>

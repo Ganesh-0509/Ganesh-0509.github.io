@@ -1,129 +1,110 @@
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { projects } from '../data/content'
+import { navigate } from '../lib/hooks'
+import { CodeIcon, DocIcon, ExternalIcon } from './Icons'
+import ProjectModal from './ProjectModal'
 import Reveal from './Reveal'
 
 const EASE = [0.22, 1, 0.36, 1]
 
+// ── Compact project card ─────────────────────────────────────────────────────
+// Deliberately shallow: preview, title, and the one-line problem. Architecture,
+// stack and metrics live behind "Overview" (and on the full projects page) so
+// the grid stays scannable instead of becoming a wall of text.
 function ProjectCard({ p, n, onOpen }) {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      className="case"
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, ease: EASE, delay: (n % 2) * 0.08 }}
-      className="pcard"
+      transition={{ duration: 0.55, ease: EASE, delay: (n % 2) * 0.07 }}
     >
       <button
         type="button"
-        className={`pcard-media tone-${p.tone}`}
+        className={`case-media tone-${p.tone}`}
         onClick={() => onOpen(p)}
-        aria-label={`Read the story: ${p.title}`}
+        aria-label={`Open the overview for ${p.title}`}
       >
-        <span className="pcard-chrome" aria-hidden="true"><i /><i /><i /></span>
+        <span className="case-chrome" aria-hidden="true"><i /><i /><i /></span>
         {p.image
-          ? <img src={p.image} alt={p.title} loading="lazy" />
-          : <span className="pcard-ph serif">{p.title}</span>}
+          ? <img src={p.image} alt="" loading="lazy" decoding="async" />
+          : <span className="case-ph">{p.title}</span>}
       </button>
 
-      <div className="pcard-body">
-        <h3 className="pcard-title">{p.title}</h3>
-        <button type="button" className="pcard-link tlink tlink--accent" onClick={() => onOpen(p)}>
-          Read the story <span className="arr">→</span>
-        </button>
+      <div className="case-body">
+        <header className="case-head">
+          <h3 className="case-title">{p.title}</h3>
+          <span className="case-tags mono dim">{p.tags.join(' / ')}</span>
+        </header>
+
+        <p className="case-problem">{p.problem}</p>
+
+        <footer className="case-links">
+          <button type="button" className="case-link case-link--key" onClick={() => onOpen(p)}>
+            <DocIcon /> Overview
+          </button>
+          {p.demo && (
+            <a className="case-link" href={p.demo} target="_blank" rel="noreferrer">
+              <ExternalIcon /> Live Demo
+            </a>
+          )}
+          {p.repo && (
+            <a className="case-link" href={p.repo} target="_blank" rel="noreferrer">
+              <CodeIcon /> Code
+            </a>
+          )}
+        </footer>
       </div>
     </motion.article>
   )
 }
 
-function StoryModal({ project, onClose }) {
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [onClose])
-
-  const story = project.story || [project.blurb]
-
-  return (
-    <motion.div
-      className="story-overlay"
-      onClick={onClose}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <motion.div
-        className="story-modal"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label={project.title}
-        initial={{ opacity: 0, y: 28, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 18, scale: 0.98 }}
-        transition={{ duration: 0.4, ease: EASE }}
-      >
-        <button type="button" className="story-close" onClick={onClose} aria-label="Close">×</button>
-
-        {project.image && (
-          <div className={`story-media tone-${project.tone}`}>
-            <span className="pcard-chrome" aria-hidden="true"><i /><i /><i /></span>
-            <img src={project.image} alt={project.title} />
-          </div>
-        )}
-
-        <div className="story-body">
-          <h3 className="story-title">{project.title}</h3>
-          {story.map((para, i) => <p key={i} className="story-para muted">{para}</p>)}
-          <p className="story-tech mono">{project.tech.join('  ·  ')}</p>
-
-          <div className="story-links">
-            {project.demo && (
-              <a className="tlink tlink--accent" href={project.demo} target="_blank" rel="noreferrer">
-                Live demo <span className="arr">↗</span>
-              </a>
-            )}
-            {project.repo && (
-              <a className="tlink" href={project.repo} target="_blank" rel="noreferrer">
-                View code <span className="arr">↗</span>
-              </a>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
 export default function Work() {
-  // The four best — those flagged `featured` in content.js.
-  const featured = projects.filter((p) => p.featured)
   const [active, setActive] = useState(null)
+  const close = useCallback(() => setActive(null), [])
+
+  // Only the four strongest on the landing page — the rest live on /projects.
+  const featured = projects.filter((p) => p.featured).slice(0, 4)
 
   return (
     <section id="work" className="section work">
       <div className="container">
         <div className="chapter">
           <span className="kicker">Selected work</span>
+          <span className="kicker">{String(projects.length).padStart(2, '0')} shipped</span>
         </div>
 
-        <div className="work-head">
-          <Reveal><h2 className="section-title">Things I’ve <em>built</em> &amp; shipped.</h2></Reveal>
+        <Reveal>
+          <h2 className="section-title">Systems built, <em>measured</em>, shipped.</h2>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <p className="section-lead muted">
+            Four of the strongest below — open any card for the architecture and
+            measured results.
+          </p>
+        </Reveal>
+
+        <div className="case-grid">
+          {featured.map((p, i) => (
+            <ProjectCard key={p.title} p={p} n={i} onOpen={setActive} />
+          ))}
         </div>
 
-        <div className="pcard-grid">
-          {featured.map((p, i) => <ProjectCard key={p.title} p={p} n={i} onOpen={setActive} />)}
+        <div className="work-more">
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => navigate('#/projects')}
+          >
+            View all {projects.length} projects <span className="arr" aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
 
       <AnimatePresence>
-        {active && <StoryModal project={active} onClose={() => setActive(null)} />}
+        {active && <ProjectModal project={active} onClose={close} />}
       </AnimatePresence>
     </section>
   )
