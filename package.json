@@ -6,8 +6,11 @@
   "description": "Interactive premium portfolio of Ganesh Kumar T — AI/ML engineer.",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/fetch-stats.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "stats": "node scripts/fetch-stats.mjs",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",

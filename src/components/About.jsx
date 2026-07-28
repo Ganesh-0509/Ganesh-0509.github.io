@@ -4,12 +4,14 @@ import { about, profile } from '../data/content'
 import { useCountUp } from '../lib/hooks'
 import Reveal from './Reveal'
 
-function Stat({ value, suffix, label, start }) {
+function Stat({ value, prefix, suffix, label, start }) {
   const n = useCountUp(value, start)
   return (
     <div className="stat">
       <span className="stat-value">
-        {n}<span className="accent">{suffix}</span>
+        {prefix && <span className="accent">{prefix}</span>}
+        {n}
+        {suffix && <span className="accent">{suffix}</span>}
       </span>
       <span className="stat-label mono">{label}</span>
     </div>
@@ -56,6 +58,12 @@ export default function About() {
             <Stat key={s.label} {...s} start={inView} />
           ))}
         </div>
+
+        {/* Provenance for the numbers above — the LeetCode split is fetched at
+            build time, so saying when makes it checkable rather than boastful. */}
+        {about.statsNote && (
+          <p className="about-stats-note mono dim">{about.statsNote}</p>
+        )}
       </div>
     </section>
   )
