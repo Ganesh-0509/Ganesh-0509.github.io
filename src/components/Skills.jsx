@@ -13,7 +13,9 @@ export default function Skills() {
       <div className="container">
         <div className="chapter">
           <span className="kicker">Technical stack</span>
-          <span className="kicker">04 domains</span>
+          {/* Derived, not typed. A hardcoded count is how the About section
+              ended up claiming "14+ projects" above a Work header reading "06". */}
+          <span className="kicker">{String(skillDomains.length).padStart(2, '0')} domains</span>
         </div>
 
         <Reveal>
@@ -22,9 +24,12 @@ export default function Skills() {
           </h2>
         </Reveal>
         <Reveal delay={0.06}>
+          {/* Was "every tool appears in at least one project below" — no longer
+              true once the stack widened past the seven cards on this page, and
+              a claim that's checkable and wrong is worse than none. */}
           <p className="section-lead muted">
-            Grouped by engineering domain. Every tool listed here appears in at
-            least one project below — hover a badge for what it does.
+            Grouped by engineering domain. Everything here is used by something
+            I&rsquo;ve shipped — hover a badge for what it does.
           </p>
         </Reveal>
 

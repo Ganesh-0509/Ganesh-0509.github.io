@@ -47,16 +47,18 @@ export const about = {
   // Two short lines. Anything longer goes unread — the projects do the talking.
   story: [
     'Third-year AI/ML undergrad at Saveetha Engineering College, Chennai (CGPA 8.2). I ship systems rather than notebooks: retrieval that cites its sources, agents that check their own output, models exported so they actually run somewhere.',
-    'Most of what I know came from building under a deadline — three national and state placements in 2025, and one agent pipeline reviewed and merged into a company’s open-source product.',
+    'Most of what I know came from building under a deadline — Intel, VIT, the OpenAI × NxtWave buildathon, and Top 106 of 85,000+ at the Google Solution Challenge — plus one agent pipeline reviewed and merged into a company’s open-source product.',
   ],
   // Numbers that cannot drift: LeetCode is fetched at build time (see
   // scripts/fetch-stats.mjs) and the project count is derived from the array
   // below, so it can never disagree with the Work section again.
   stats: [
     { label: 'LeetCode solved', value: stats.leetcode.total, suffix: '' },
-    // Hard count is the only LeetCode number that signals anything to an engineer.
-    { label: 'Hard problems', value: stats.leetcode.hard, suffix: '' },
+    // ₹25,000 Intel + ₹10,000 VØID v1. Both are in `wins` with a post to prove them.
     { label: 'Prize money won', value: 35, suffix: 'k', prefix: '₹' },
+    // The hardest number here to earn and the hardest to fake: 85,000+
+    // registrations, 6,700+ prototypes submitted, 106 teams left.
+    { label: 'Of 85,000+ · Solution Challenge', value: 106, prefix: 'Top ' },
   ],
   // Rendered under the stat row as one mono line.
   statsNote: `LeetCode ${stats.leetcode.easy} easy · ${stats.leetcode.medium} medium · ${stats.leetcode.hard} hard — updated ${stats.fetchedAt}`,
@@ -69,7 +71,7 @@ export const techMeta = {
   // Languages
   Python: 'Primary language — every ML pipeline and FastAPI backend here.',
   TypeScript: 'Typed React and Next.js front-ends; strict mode by default.',
-  Java: 'Oracle Certified Professional, Java SE 21 — OOP, collections, JDBC.',
+  Java: 'Oracle Certified Professional, Java SE — OOP, collections, JDBC.',
   JavaScript: 'ES2023 — DOM work, D3 and Babylon.js scenes.',
   SQL: 'Postgres dialect — schema design, joins, window functions.',
 
@@ -79,41 +81,56 @@ export const techMeta = {
   RAG: 'Retrieval-augmented generation with grounding and hallucination checks.',
   PGVector: 'Postgres vector extension — embedding storage and ANN search.',
   Tavily: 'Grounded web-search API — gives agents real sources to cite.',
-  'Intel OPEA': 'Intel’s open enterprise-AI platform — the Enterprise360 runtime.',
+  Genkit: 'Google’s AI orchestration framework — multi-step reasoning workflows.',
   ONNX: 'Open Neural Network Exchange — exports models for fast edge inference.',
   'scikit-learn': 'Classical ML — RandomForest classifiers, metrics, cross-validation.',
+  XGBoost: 'Gradient-boosted trees — the classifier audited inside Bias-Lab.',
   SHAP: 'Shapley additive explanations — per-feature model attribution.',
   Fairlearn: 'Fairness metrics and bias mitigation for classification models.',
   'NumPy / SciPy': 'Numerical arrays and signal processing under the vision pipelines.',
+  Pandas: 'Dataframe wrangling — feature engineering and dataset audits.',
 
   // Web & Cloud
   React: 'React 18 — hooks, concurrent rendering, memoised component trees.',
   'Next.js': 'App Router, server components, and file-based routing.',
+  Vite: 'Build tool behind the React front-ends, including this site.',
+  'React Flow': 'Node-graph UI — the interactive skill-dependency graph in Jobyn.',
   FastAPI: 'Async Python API framework — the backend in five of these builds.',
   Flask: 'Lightweight Python service layer for the vision and terrain pipelines.',
+  'Node.js': 'Express services and Redis-backed background workers.',
   Pydantic: 'Schema validation — how agent output is forced into valid JSON.',
+  Tailwind: 'Utility-first CSS on the Next.js and Vite front-ends.',
+
+  // Data stores
   PostgreSQL: 'Relational store — the system of record behind PGVector.',
   Supabase: 'Managed Postgres with auth, row-level security and storage.',
+  Firebase: 'Auth and realtime data for the FinMate and EcoTrace clients.',
+  Firestore: 'Document store holding audit runs and reactive UI state.',
   SQLite: 'Embedded store for campaign state and prompt-version history.',
   Redis: 'In-memory cache for hot retrieval paths and session state.',
+
+  // Infrastructure
   Docker: 'Containerised builds — reproducible from laptop to Cloud Run.',
-  Firebase: 'Auth and realtime data for the FinMate client.',
+  'Cloud Run': 'Google serverless containers — how several demos are deployed.',
+  'GitHub Actions': 'CI on every push: build, checks, and deploy to Pages.',
+  Git: 'Branch-per-feature workflow, reviewed merges, GitHub Actions CI.',
 
   // Vision & Interfaces
   OpenCV: 'Computer vision — OCR preprocessing, shape-from-shading, contours.',
   'Tesseract OCR': 'Optical character recognition, tuned for Tamil and English.',
   'D3.js': 'Data-driven SVG — the knowledge-graph and ward visualisations.',
   'Babylon.js': 'WebGL 3D engine rendering the reconstructed lunar terrain.',
-  Git: 'Branch-per-feature workflow, reviewed merges, GitHub Actions CI.',
 }
 
 // ── Skills, grouped by engineering domain ────────────────────────────────────
 // No percentages, no star ratings — those signal nothing to an engineer. Just
 // the domains and the real tools inside them.
 //
-// REMOVED 2026-07-28: GPT-4o, LangGraph, Node.js, Cloud Run, Framer Motion,
-// HTML5/CSS3. No project on this site uses them — listing them broke ground
-// rule 1 and is exactly the padding a senior reviewer scans for.
+// EXPANDED 2026-07-28. Still bound by ground rule 1 — every tool below is used
+// by a repo Ganesh actually owns. What stays OUT and why:
+//   GPT-4o, LangGraph  — nothing here uses them
+//   Intel OPEA         — only Enterprise360 used it, and that has no public repo
+//   HTML5/CSS3         — not a skill worth a badge at this level
 export const skillDomains = [
   {
     id: 'languages',
@@ -126,24 +143,34 @@ export const skillDomains = [
     label: 'AI & Data',
     note: 'Model orchestration, retrieval and evaluation.',
     items: [
-      'Gemini', 'Claude', 'RAG', 'PGVector', 'Tavily', 'Intel OPEA',
-      'ONNX', 'scikit-learn', 'SHAP', 'Fairlearn', 'NumPy / SciPy',
+      'Gemini', 'Claude', 'RAG', 'PGVector', 'Tavily', 'Genkit',
+      'ONNX', 'scikit-learn', 'XGBoost', 'SHAP', 'Fairlearn',
+      'NumPy / SciPy', 'Pandas',
     ],
   },
   {
     id: 'web',
-    label: 'Web & Cloud Systems',
+    label: 'Web & Backend',
     note: 'How the models reach a user.',
     items: [
-      'React', 'Next.js', 'FastAPI', 'Flask', 'Pydantic',
-      'PostgreSQL', 'Supabase', 'SQLite', 'Redis', 'Docker', 'Firebase',
+      'React', 'Next.js', 'Vite', 'React Flow', 'Tailwind',
+      'FastAPI', 'Flask', 'Node.js', 'Pydantic',
+    ],
+  },
+  {
+    id: 'data',
+    label: 'Data & Infrastructure',
+    note: 'Where state lives, and how it ships.',
+    items: [
+      'PostgreSQL', 'Supabase', 'Firebase', 'Firestore', 'SQLite', 'Redis',
+      'Docker', 'Cloud Run', 'GitHub Actions', 'Git',
     ],
   },
   {
     id: 'vision',
     label: 'Vision & Interfaces',
     note: 'Pixels in, structured data out — and back to the screen.',
-    items: ['OpenCV', 'Tesseract OCR', 'D3.js', 'Babylon.js', 'Git'],
+    items: ['OpenCV', 'Tesseract OCR', 'D3.js', 'Babylon.js'],
   },
 ]
 
@@ -225,14 +252,18 @@ export const projects = [
       // TODO: record median audit runtime for a 10k-row dataset.
     ],
     tags: ['AI/ML', 'Full Stack'],
-    tech: ['React', 'FastAPI', 'SHAP', 'Fairlearn', 'Gemini', 'scikit-learn'],
+    // XGBoost + Firestore per the build-story post — the site previously listed
+    // scikit-learn here, which wasn't what actually shipped.
+    tech: ['React', 'FastAPI', 'XGBoost', 'SHAP', 'Fairlearn', 'Gemini', 'Firestore'],
     tone: 'violet',
     image: asset('bias-lab.png'),
     repo: 'https://github.com/Ganesh-0509/Bias-Lab',
     // REMOVED 2026-07-28: the Cloud Run revision returns 500. Restore this line
     // only once the URL answers 200 again.
     demo: '',
-    writeup: '',
+    // The build-story post — why fairness deliberately isn't reported as one
+    // number, and why the LLM was barred from inventing a statistic.
+    writeup: 'https://www.linkedin.com/posts/ganesh-kumar-957t_build-with-ai-solution-challenge-activity-7486336916909637632-069P',
     featured: true,
   },
   {
@@ -240,16 +271,16 @@ export const projects = [
     problem:
       'Civic sentiment shifts faster than the dashboards built to track it, so a spike in one ward reads as noise instead of signal.',
     architecture:
-      'FastAPI ingestion feeding a knowledge graph that links places, issues and voices across 250 MCD wards, with Gemini handling language understanding and a D3.js front-end rendering the graph in real time.',
+      'A 35-endpoint FastAPI backend aggregates 9 RSS news feeds and anonymous citizen submissions, runs multilingual sentiment across 22+ Indian languages, and geo-resolves each signal down to state, district, constituency and ward. Supabase Postgres holds the record with role-based auth; a D3.js front-end renders the knowledge graph in real time.',
     blurb:
-      "Real-time public-sentiment platform with a knowledge graph spanning India's 250 MCD wards.",
+      'Real-time civic sentiment across 22+ Indian languages, geo-resolved from state down to ward, with AI-generated policy briefs.',
     metrics: [
-      { value: '250', label: 'MCD wards mapped' },
-      { value: 'Real-time', label: 'Ingestion mode' },
-      // TODO: measure end-to-end ingestion→render latency and daily event volume.
+      { value: '22+', label: 'Languages' },
+      { value: '35', label: 'API endpoints' },
+      { value: '28', label: 'States covered' },
     ],
     tags: ['AI/ML', 'Full Stack'],
-    tech: ['FastAPI', 'React', 'D3.js', 'Gemini'],
+    tech: ['FastAPI', 'React', 'D3.js', 'Gemini', 'Supabase', 'PostgreSQL'],
     tone: 'sky',
     image: asset('jananaadi.png'),
     repo: 'https://github.com/Ganesh-0509/JanaNaadi',
@@ -257,32 +288,11 @@ export const projects = [
     writeup: '',
     featured: true,
   },
-  {
-    title: 'Enterprise360',
-    problem:
-      'Enterprise knowledge is split across PDFs, spreadsheets and recorded calls, so the answer to one question means opening three different tools.',
-    architecture:
-      'Multimodal agentic pipeline on Intel OPEA: PDFs, Excel and speech-to-text audio all normalise into one RAG index, with hierarchical agent flows and explicit context control at each hand-off to keep the final answer grounded.',
-    blurb:
-      'Multimodal agentic assistant pulling insights from PDFs, Excel and audio — built on Intel OPEA. Took Top 12 nationally at the Intel AI Hackathon 2025.',
-    metrics: [
-      { value: '3', label: 'Input modalities' },
-      { value: 'Top 12', label: 'Intel AI Hackathon' },
-      { value: '₹25k', label: 'Prize' },
-    ],
-    tags: ['Agentic AI', 'Multimodal'],
-    tech: ['Python', 'React', 'Intel OPEA', 'RAG'],
-    tone: 'sky',
-    // TODO: no screenshot yet — this is the strongest award on the site and it
-    // has no picture. Recapture from the demo build or the submission deck.
-    image: '',
-    // TODO: no public repo. Push a cleaned-up version — an award with no code
-    // behind it is the weakest kind of claim on a portfolio.
-    repo: '',
-    demo: '',
-    writeup: '',
-    featured: false,
-  },
+  // Enterprise360 is NOT listed here, deliberately. It's the Intel Top 12
+  // project and it has no public repo — a project card with no code behind it
+  // is the weakest thing you can put on a portfolio. It stays where it belongs:
+  // as a dated, LinkedIn-linked entry in `wins`. Add it back as a project the
+  // day the repo goes public.
   {
     title: 'Namma Connect',
     problem:
@@ -356,36 +366,104 @@ export const projects = [
 
 // ── Highlights / receipts ────────────────────────────────────────────────────
 // CORRECTED 2026-07-28. These placings previously contradicted both each other
-// and the résumé PDF. Confirmed by Ganesh; the PDF must be regenerated to match.
+// and the résumé PDF. Confirmed by Ganesh; see the canonical wording note.
 //   Intel   → Top 12 nationally, ₹25,000  (was wrongly "1st of 90+" in the hero)
-//   VIT     → 2nd Runners-Up of 90 teams  (was wrongly "Winner")
+//   VØID    → 2nd Runner-Up of 90 teams   (was wrongly "Winner")
 //   NxtWave → State 1st, then National Top 10  (was understated as "Finalist")
+//
+// EVERY `year` here is derived from the timestamp embedded in its own LinkedIn
+// activity id, not from memory. That corrected two wrong dates already on the
+// site: Intel was showing May 2025 (actually July) and VØID October (November).
+//
+// `url` points at the post that proves the entry — the whole section is called
+// "Proof of work", so each card should be checkable in one click. `image` is
+// optional; entries without one render as a compact text card rather than a
+// placeholder block.
 export const wins = [
+  {
+    title: 'Python Programming Internship · Ybi Foundation',
+    chip: 'Internship',
+    medal: '💼',
+    detail: 'First real engineering role — Python fundamentals applied to project work rather than coursework.',
+    year: 'Mar 2025',
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_i-have-successfully-completed-a-python-programming-activity-7301955798304264192-J_pN',
+  },
   {
     title: 'Top 12 · Intel AI Hackathon 2025',
     chip: 'National',
     medal: '🏅',
-    detail: 'Top 12 nationally and ₹25,000 for Enterprise360, a multimodal agentic assistant built on Intel OPEA.',
-    year: 'May 2025',
+    detail: 'Top 12 nationally out of 90+ teams and ₹25,000 for Enterprise360, a multimodal agentic assistant built on Intel OPEA.',
+    year: 'Jul 2025',
     image: asset('win-intel.png'),
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-moment-im-excited-to-share-that-activity-7348569256302731264-PcgE',
   },
   {
-    // Event name confirmed as VOID v1 '25 (the résumé PDF's "V?ID" was a broken
-    // glyph in its text layer, not a real character).
-    title: '2nd Runner-Up · VOID v1 ’25, VIT',
+    // Event name is VØID v1 '25 — the résumé PDF's "V?ID" was the Ø glyph
+    // failing to survive pdftotext, not a typo.
+    title: '2nd Runner-Up · VØID v1 ’25, VIT',
     chip: 'Hackathon',
     medal: '🥉',
     detail: 'Top 25 of 90 teams, then 2nd Runner-Up and ₹10,000 for FinMate — a voice-and-OCR finance co-pilot built for Indian spending.',
-    year: 'Oct 2025',
+    year: 'Nov 2025',
     image: asset('win-vit.jpg'),
+    url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackathonjourney-voidv125-teamsparklers-ugcPost-7391125225632890880-XODh',
   },
   {
     title: 'State 1st · OpenAI × NxtWave Buildathon',
     chip: 'Buildathon',
     medal: '🥇',
-    detail: 'First place at Tamil Nadu state level with Sahaay-AI, then Top 10 in the national round.',
+    detail: 'First place at Tamil Nadu state level with Sahaay-AI, a 48-hour build, then Top 10 at the national round in Delhi.',
     year: 'Nov 2025',
     image: asset('win-nxtwave.jpg'),
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_openaibuildathontn-openaiacademy-nxtwave-activity-7397542419694751744-2-l3',
+  },
+  {
+    title: 'Oracle Certified Professional · Java SE',
+    chip: 'Certification',
+    medal: '📜',
+    detail: 'Proctored Oracle certification in core Java and object-oriented design.',
+    year: 'Nov 2025',
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-achievement-i-am-thrilled-to-activity-7400199432232775681-_Me0',
+  },
+  {
+    title: 'LeetCode 100 Days Badge',
+    chip: 'Consistency',
+    medal: '🔥',
+    detail: '100+ days of daily problem-solving across 2025, after the 50-day badge in October.',
+    year: 'Dec 2025',
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_leetcode-100daysofcode-consistency-activity-7411624906712551424-qu-j',
+  },
+  {
+    title: 'Top 30 of 1500+ · Caterpillar Tech Challenge 2026',
+    chip: 'Corporate',
+    medal: '🛠️',
+    detail: 'Team MechBusters advanced to Round 2 and the mentor sessions with Caterpillar engineers.',
+    year: 'Apr 2026',
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_caterpillartechchallenge-mechbusters-top30-activity-7449660247402577920-W3_t',
+  },
+  {
+    title: 'Top 106 · Google Solution Challenge 2026',
+    chip: 'Global',
+    medal: '🌍',
+    detail: 'Top 106 out of 85,000+ registrations and 6,700+ prototype submissions, with Bias-Lab — an AI fairness auditing platform.',
+    year: 'Jun 2026',
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_solutionchallenge2026-buildwithai-gdg-activity-7468294267187343360-O6Wo',
+  },
+  {
+    title: 'Offline round · HackHustle 2.0',
+    chip: 'Hackathon',
+    medal: '⚡',
+    detail: '63 teams of 1000+ made it past the proposal screen to the 24-hour offline round.',
+    year: 'Jun 2026',
+    url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackhustle2-hackathon-saveethaengineeringcollege-ugcPost-7474004299845574656-jiJA',
+  },
+  {
+    title: 'National round · India Innovates 2026',
+    chip: 'National',
+    medal: '🇮🇳',
+    detail: 'Presented JanaNaadi — multilingual civic sentiment across 22+ Indian languages and 28 states — alongside teams from across the country.',
+    year: 'Jul 2026',
+    url: 'https://www.linkedin.com/posts/tejasree-k-3a59a6328_indiainnovates2026-hackathon-jananaadi-ugcPost-7482695679199518720-m0rJ',
   },
 ]
 

@@ -620,6 +620,30 @@ main > section.section {
 .wincard-title { font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 380; line-height: 1.18; }
 .wincard-desc { font-size: 0.93rem; line-height: 1.6; }
 
+/* Most highlights are a placing, not a photo. Rather than filling the media
+   column with an empty tinted block, a bare card drops the column entirely and
+   the medal moves inline next to the chip. */
+.wincard--bare { grid-template-columns: 1fr; }
+.wincard-meta { display: flex; align-items: center; gap: 0.6rem; }
+.wincard-medal-inline { font-size: 1.05rem; line-height: 1; }
+
+/* The whole card is the link, so kill the inherited anchor styling and let the
+   existing .wincard hover state do the affordance. */
+.wincard--link { color: inherit; text-decoration: none; cursor: pointer; }
+.wincard-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 0.15rem; font-size: 0.68rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--terra-deep);
+  opacity: 0.75; transition: opacity .35s var(--ease);
+}
+.wincard-link svg { width: 13px; height: 13px; }
+.wincard--link:hover .wincard-link { opacity: 1; }
+/* Keyboard users get the same cue mouse users get on hover. */
+.wincard--link:focus-visible {
+  outline: 2px solid var(--terra-deep); outline-offset: 3px;
+  border-color: var(--ochre-rule);
+}
+
 /* ── Contact ──────────────────────────────────────────────────────────────── */
 .contact-grid {
   display: grid; grid-template-columns: 0.9fr 1.1fr;
