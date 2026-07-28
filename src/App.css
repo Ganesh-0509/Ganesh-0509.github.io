@@ -367,6 +367,17 @@ main > section.section {
   font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2rem);
   color: rgba(255, 255, 255, 0.92); letter-spacing: -0.02em;
 }
+/* Metric stand-in for a project with no screenshot — reads as a deliberate
+   stat panel rather than a missing image. */
+.case-ph--metric { align-content: center; gap: 0.5rem; }
+.case-ph-value {
+  display: block; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1;
+  color: rgba(255, 255, 255, 0.96);
+}
+.case-ph-label {
+  display: block; font-size: 0.66rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.72);
+}
 
 .case-body {
   display: flex; flex-direction: column; flex: 1; min-width: 0;
@@ -575,11 +586,33 @@ main > section.section {
   flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--card); border: 1px solid var(--rule);
+  transition: border-color .45s var(--ease), box-shadow .45s var(--ease);
 }
-.tl-dot i { width: 9px; height: 9px; border-radius: 50%; background: var(--terra); display: block; }
+.tl-dot i {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--terra); display: block;
+  transform: scale(0.72); opacity: 0.5;
+  transition: transform .45s var(--ease), opacity .45s var(--ease);
+}
 .tl-title {
   font-family: var(--serif); font-size: clamp(1.3rem, 2.4vw, 1.9rem);
   font-weight: 380; letter-spacing: -0.02em; white-space: nowrap;
+  opacity: 0.42; transition: opacity .45s var(--ease), color .45s var(--ease);
+}
+
+/* The entry you're reading. Everything else sits back, so scrolling reads as
+   one entry opening at a time rather than ten equal blocks going past. */
+.tl-row--active .tl-title { opacity: 1; color: var(--terra-deep); }
+.tl-row--active .tl-dot {
+  border-color: var(--ochre-rule);
+  box-shadow: 0 0 0 5px rgba(176, 106, 84, 0.10);
+}
+.tl-row--active .tl-dot i { transform: scale(1); opacity: 1; }
+
+/* Motion-sensitive users get the layout, not the state changes. */
+@media (prefers-reduced-motion: reduce) {
+  .tl-title { opacity: 1; }
+  .tl-dot i { transform: none; opacity: 1; }
+  .tl-dot, .tl-dot i, .tl-title { transition: none; }
 }
 /* Shown only when the rail column collapses on narrow screens. */
 .tl-title-inline { display: none; }
@@ -602,12 +635,6 @@ main > section.section {
 .wincard-img { position: relative; overflow: hidden; background: var(--paper-2); min-height: 190px; }
 .wincard-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
 .wincard:hover .wincard-img img { transform: scale(1.03); }
-.wincard-medal {
-  position: absolute; top: 0.8rem; left: 0.8rem; font-size: 1rem;
-  width: 2.2rem; height: 2.2rem; display: grid; place-items: center;
-  background: rgba(253, 247, 244, 0.94); border-radius: 50%;
-  box-shadow: 0 6px 16px -8px rgba(42, 35, 32, 0.6);
-}
 .wincard-body {
   display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
   padding: clamp(1.3rem, 2.2vw, 1.8rem); justify-content: center;
@@ -621,11 +648,8 @@ main > section.section {
 .wincard-desc { font-size: 0.93rem; line-height: 1.6; }
 
 /* Most highlights are a placing, not a photo. Rather than filling the media
-   column with an empty tinted block, a bare card drops the column entirely and
-   the medal moves inline next to the chip. */
+   column with an empty tinted block, a bare card drops the column entirely. */
 .wincard--bare { grid-template-columns: 1fr; }
-.wincard-meta { display: flex; align-items: center; gap: 0.6rem; }
-.wincard-medal-inline { font-size: 1.05rem; line-height: 1; }
 
 /* The whole card is the link, so kill the inherited anchor styling and let the
    existing .wincard hover state do the affordance. */

@@ -66,7 +66,7 @@ const COMMANDS = {
   wins: {
     hint: 'hackathons and awards',
     run: () =>
-      wins.map((w) => line(`${w.medal}  ${pad(w.year, 10)}${w.title}`, 'out')),
+      wins.map((w) => line(`${pad(w.year, 10)}${w.title}`, 'out')),
   },
 
   stats: {

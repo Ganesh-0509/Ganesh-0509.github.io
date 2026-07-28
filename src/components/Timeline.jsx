@@ -5,9 +5,13 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 // Aceternity's Timeline, ported to plain CSS + framer-motion.
 //
 // Same API as the original — `data: [{ title, content }]` — so entries stay
-// declarative. Two behaviours:
+// declarative. Three behaviours:
 //   • Each title sticks while its content scrolls past it.
 //   • A beam fills the rail as you scroll, driven by useScroll progress.
+//   • The entry you're actually reading is marked active: its date goes to full
+//     contrast and its dot fills, while the rest sit back. Without this the
+//     sticky date is just a label that happens not to move — the active state is
+//     what makes one entry "open up" at a time as you scroll.
 //
 // The beam is absolutely positioned, so animating its height reflows nothing
 // else on the page. Everything else is transform/opacity.
@@ -15,8 +19,39 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 export default function Timeline({ data }) {
   const listRef = useRef(null)
   const containerRef = useRef(null)
+  const rowRefs = useRef([])
   const [railHeight, setRailHeight] = useState(0)
+  const [active, setActive] = useState(0)
   const reduce = useReducedMotion()
+
+  // Which entry is the reader on? A band across the upper-middle of the
+  // viewport, so an entry becomes active as it settles under the sticky date
+  // rather than the instant its first pixel appears.
+  useEffect(() => {
+    const rows = rowRefs.current.filter(Boolean)
+    if (!rows.length) return
+
+    // Track the whole visible set rather than reacting to individual events.
+    // Short entries mean two rows can sit in the band at once; taking the
+    // topmost gives one unambiguous answer instead of a flicker between them.
+    const visible = new Set()
+
+    const io = new IntersectionObserver(
+      (records) => {
+        for (const r of records) {
+          const i = rows.indexOf(r.target)
+          if (i < 0) continue
+          if (r.isIntersecting) visible.add(i)
+          else visible.delete(i)
+        }
+        if (visible.size) setActive(Math.min(...visible))
+      },
+      { rootMargin: '-18% 0px -55% 0px', threshold: 0 }
+    )
+
+    rows.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [data])
 
   // Measure the rail, and keep it correct when the layout reflows (font load,
   // resize, image decode).
@@ -54,7 +89,11 @@ export default function Timeline({ data }) {
         </div>
 
         {data.map((item, i) => (
-          <div className="tl-row" key={`${item.title}-${i}`}>
+          <div
+            className={`tl-row ${i === active ? 'tl-row--active' : ''}`}
+            key={`${item.title}-${i}`}
+            ref={(el) => { rowRefs.current[i] = el }}
+          >
             <div className="tl-marker">
               <span className="tl-dot" aria-hidden="true"><i /></span>
               <h3 className="tl-title">{item.title}</h3>

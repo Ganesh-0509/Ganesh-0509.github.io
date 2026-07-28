@@ -12,21 +12,20 @@ import { ExternalIcon } from './Icons'
 //     renders compact rather than as an empty coloured block.
 //   • a `url` — the section is called "Proof of work", so where a post exists
 //     the whole card links to it. Where it doesn't, the card is inert.
+//
+// No medal emoji. 🥇/🏅/🔥 next to a real placing reads as sticker-decoration
+// and cheapens the result it's meant to celebrate — the placing is already in
+// the title, and the chip carries the category.
 const entries = wins.map((w) => {
   const body = (
     <>
       {w.image && (
         <div className="wincard-img">
           <img src={w.image} alt={w.title} loading="lazy" decoding="async" />
-          <span className="wincard-medal" aria-hidden="true">{w.medal}</span>
         </div>
       )}
       <div className="wincard-body">
-        <div className="wincard-meta">
-          {w.chip && <span className="wincard-chip mono">{w.chip}</span>}
-          {/* Without a photo the medal has nowhere to sit, so it moves inline. */}
-          {!w.image && <span className="wincard-medal-inline" aria-hidden="true">{w.medal}</span>}
-        </div>
+        {w.chip && <span className="wincard-chip mono">{w.chip}</span>}
         <h4 className="wincard-title">{w.title}</h4>
         <p className="wincard-desc muted">{w.detail}</p>
         {w.url && (

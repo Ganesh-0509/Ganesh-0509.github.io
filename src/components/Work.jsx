@@ -8,6 +8,21 @@ import Reveal from './Reveal'
 
 const EASE = [0.22, 1, 0.36, 1]
 
+// ── Stand-in for a project with no screenshot ────────────────────────────────
+// Leads with the project's headline metric rather than repeating the title,
+// which is already rendered directly below the media block. A card with no
+// screenshot should still say something the title doesn't.
+function Placeholder({ p }) {
+  const lead = p.metrics?.[0]
+  if (!lead) return <span className="case-ph">{p.title}</span>
+  return (
+    <span className="case-ph case-ph--metric">
+      <span className="case-ph-value">{lead.value}</span>
+      <span className="case-ph-label mono">{lead.label}</span>
+    </span>
+  )
+}
+
 // ── Compact project card ─────────────────────────────────────────────────────
 // Deliberately shallow: preview, title, and the one-line problem. Architecture,
 // stack and metrics live behind "Overview" (and on the full projects page) so
@@ -30,7 +45,7 @@ function ProjectCard({ p, n, onOpen }) {
         <span className="case-chrome" aria-hidden="true"><i /><i /><i /></span>
         {p.image
           ? <img src={p.image} alt="" loading="lazy" decoding="async" />
-          : <span className="case-ph">{p.title}</span>}
+          : <Placeholder p={p} />}
       </button>
 
       <div className="case-body">

@@ -205,9 +205,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['FastAPI', 'React', 'PGVector', 'Gemini', 'ONNX', 'Redis'],
     tone: 'violet',
-    // TODO: current screenshot is the old CampusSync framing — recapture from
-    // getjobyn.pages.dev and replace public/campusSync.png.
-    image: asset('campusSync.png'),
+    image: asset('jobyn.png'),
     repo: 'https://github.com/Ganesh-0509/Jobyn',
     demo: 'https://getjobyn.pages.dev',
     writeup: '',
@@ -383,7 +381,6 @@ export const wins = [
   {
     title: 'Python Programming Internship · Ybi Foundation',
     chip: 'Internship',
-    medal: '💼',
     detail: 'First real engineering role — Python fundamentals applied to project work rather than coursework.',
     year: 'Mar 2025',
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_i-have-successfully-completed-a-python-programming-activity-7301955798304264192-J_pN',
@@ -391,7 +388,6 @@ export const wins = [
   {
     title: 'Top 12 · Intel AI Hackathon 2025',
     chip: 'National',
-    medal: '🏅',
     detail: 'Top 12 nationally out of 90+ teams and ₹25,000 for Enterprise360, a multimodal agentic assistant built on Intel OPEA.',
     year: 'Jul 2025',
     image: asset('win-intel.png'),
@@ -402,7 +398,6 @@ export const wins = [
     // failing to survive pdftotext, not a typo.
     title: '2nd Runner-Up · VØID v1 ’25, VIT',
     chip: 'Hackathon',
-    medal: '🥉',
     detail: 'Top 25 of 90 teams, then 2nd Runner-Up and ₹10,000 for FinMate — a voice-and-OCR finance co-pilot built for Indian spending.',
     year: 'Nov 2025',
     image: asset('win-vit.jpg'),
@@ -411,7 +406,6 @@ export const wins = [
   {
     title: 'State 1st · OpenAI × NxtWave Buildathon',
     chip: 'Buildathon',
-    medal: '🥇',
     detail: 'First place at Tamil Nadu state level with Sahaay-AI, a 48-hour build, then Top 10 at the national round in Delhi.',
     year: 'Nov 2025',
     image: asset('win-nxtwave.jpg'),
@@ -420,7 +414,6 @@ export const wins = [
   {
     title: 'Oracle Certified Professional · Java SE',
     chip: 'Certification',
-    medal: '📜',
     detail: 'Proctored Oracle certification in core Java and object-oriented design.',
     year: 'Nov 2025',
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-achievement-i-am-thrilled-to-activity-7400199432232775681-_Me0',
@@ -428,7 +421,6 @@ export const wins = [
   {
     title: 'LeetCode 100 Days Badge',
     chip: 'Consistency',
-    medal: '🔥',
     detail: '100+ days of daily problem-solving across 2025, after the 50-day badge in October.',
     year: 'Dec 2025',
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_leetcode-100daysofcode-consistency-activity-7411624906712551424-qu-j',
@@ -436,7 +428,6 @@ export const wins = [
   {
     title: 'Top 30 of 1500+ · Caterpillar Tech Challenge 2026',
     chip: 'Corporate',
-    medal: '🛠️',
     detail: 'Team MechBusters advanced to Round 2 and the mentor sessions with Caterpillar engineers.',
     year: 'Apr 2026',
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_caterpillartechchallenge-mechbusters-top30-activity-7449660247402577920-W3_t',
@@ -444,7 +435,6 @@ export const wins = [
   {
     title: 'Top 106 · Google Solution Challenge 2026',
     chip: 'Global',
-    medal: '🌍',
     detail: 'Top 106 out of 85,000+ registrations and 6,700+ prototype submissions, with Bias-Lab — an AI fairness auditing platform.',
     year: 'Jun 2026',
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_solutionchallenge2026-buildwithai-gdg-activity-7468294267187343360-O6Wo',
@@ -452,7 +442,6 @@ export const wins = [
   {
     title: 'Offline round · HackHustle 2.0',
     chip: 'Hackathon',
-    medal: '⚡',
     detail: '63 teams of 1000+ made it past the proposal screen to the 24-hour offline round.',
     year: 'Jun 2026',
     url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackhustle2-hackathon-saveethaengineeringcollege-ugcPost-7474004299845574656-jiJA',
@@ -460,7 +449,6 @@ export const wins = [
   {
     title: 'National round · India Innovates 2026',
     chip: 'National',
-    medal: '🇮🇳',
     detail: 'Presented JanaNaadi — multilingual civic sentiment across 22+ Indian languages and 28 states — alongside teams from across the country.',
     year: 'Jul 2026',
     url: 'https://www.linkedin.com/posts/tejasree-k-3a59a6328_indiainnovates2026-hackathon-jananaadi-ugcPost-7482695679199518720-m0rJ',
