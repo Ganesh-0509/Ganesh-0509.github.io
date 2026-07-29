@@ -15,8 +15,23 @@ import ProjectsPage from './components/ProjectsPage'
 import { ToastProvider } from './components/Toast'
 import './App.css'
 
+// A boot screen is charming once and irritating the third time. Remember that
+// it's been shown for this tab, so returning from the projects page or hitting
+// back doesn't replay it. sessionStorage (not localStorage) so a genuine new
+// visit still gets the intro.
+const BOOT_KEY = 'gk:booted'
+
+function alreadyBooted() {
+  try {
+    return sessionStorage.getItem(BOOT_KEY) === '1'
+  } catch {
+    // Private mode / storage disabled — just show the preloader.
+    return false
+  }
+}
+
 export default function App() {
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(alreadyBooted)
   const [resumeOpen, setResumeOpen] = useState(false)
   const route = useHashRoute()
   useSmoothScroll()
@@ -33,7 +48,14 @@ export default function App() {
 
       {/* The preloader is a first-visit thing — skip it on a deep link. */}
       <AnimatePresence>
-        {!loaded && !onProjectsPage && <Preloader onDone={() => setLoaded(true)} />}
+        {!loaded && !onProjectsPage && (
+          <Preloader
+            onDone={() => {
+              try { sessionStorage.setItem(BOOT_KEY, '1') } catch { /* storage blocked */ }
+              setLoaded(true)
+            }}
+          />
+        )}
       </AnimatePresence>
 
       <Navbar onResume={openResume} onPage={onProjectsPage} />

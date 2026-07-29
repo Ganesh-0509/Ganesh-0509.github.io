@@ -16,16 +16,41 @@
 .skip-link:focus { transform: translate(-50%, 0); }
 
 /* ── Preloader ────────────────────────────────────────────────────────────── */
+/* ── Preloader: curved sweep ──────────────────────────────────────────────────
+   The sheet is 100vh plus a curved lip hanging below it, so a single
+   `y: -100%` clears the whole thing. No background on the wrapper itself —
+   the body and lip ARE the cover, and a background here would keep the page
+   hidden after they had already left. */
 .preloader {
-  position: fixed; inset: 0; z-index: 9000; background: var(--paper);
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: var(--gutter);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+  height: calc(100vh + var(--lip, 16vh));
+  /* The lip is wider than the viewport (see below); without this it would
+     create a horizontal scrollbar for the duration of the intro. */
+  overflow-x: clip;
+  will-change: transform;
 }
-.preloader-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; gap: 1rem; }
-.preloader-name { font-family: var(--serif); font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 360; }
-.preloader-count { font-size: 0.85rem; color: var(--ink-3); }
-.preloader-bar { height: 1px; width: 100%; background: var(--rule); }
-.preloader-bar-fill { height: 1px; background: var(--ink); transform-origin: left; will-change: transform; }
+.wave-body {
+  display: block; height: 100vh; width: 100%;
+  /* Vertical, not radial, and it resolves to exactly var(--ink) well before the
+     bottom edge. A radial gradient left a visible hairline where the body met
+     the lip, because the two elements were landing on fractionally different
+     colours at the join. */
+  background: linear-gradient(180deg, #342c28 0%, var(--ink) 55%);
+}
+/* The parabola. An elliptical bottom radius on a strip wider than the viewport
+   keeps the curve shallow across the middle and stops the corners turning up
+   inside the frame. */
+.wave-lip {
+  display: block; height: var(--lip, 16vh);
+  width: 140%; margin-left: -20%;
+  /* Overlap the body by a pixel: at fractional device-pixel ratios the two
+     blocks can otherwise leave a sub-pixel gap that reads as a seam. */
+  margin-top: -1px;
+  background: var(--ink);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  transform-origin: top center;
+  will-change: transform;
+}
 
 /* ── Navbar ───────────────────────────────────────────────────────────────── */
 .nav {
@@ -320,6 +345,85 @@ main > section.section {
 .domain-title { font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 380; }
 .domain-count { font-size: 0.7rem; color: var(--terra-deep); }
 .domain-note { margin-top: 0.4rem; font-size: 0.88rem; line-height: 1.55; }
+
+/* ── Bento — the Skills layout ────────────────────────────────────────────────
+   Twelve columns; each cell sets its own --span. Cells are deliberately unequal
+   so the section has a shape: the domain with the most tools takes the most
+   room. `grid-auto-flow: dense` lets a narrow cell backfill a gap a wide one
+   leaves, so the block stays packed without hand-placing anything. */
+.bento {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: clamp(0.9rem, 1.8vw, 1.35rem);
+  margin-top: clamp(2.2rem, 5vh, 3rem);
+}
+.bento-cell {
+  grid-column: span var(--span, 6);
+  display: flex; flex-direction: column; min-width: 0;
+  padding: clamp(1.2rem, 2vw, 1.6rem);
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  transition: border-color .4s var(--ease), box-shadow .4s var(--ease);
+}
+.bento-cell:hover {
+  border-color: var(--ochre-rule);
+  box-shadow: 0 18px 40px -30px rgba(42, 35, 32, 0.5);
+}
+.bento-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.bento-title {
+  font-family: var(--serif); font-size: clamp(1.2rem, 2.1vw, 1.55rem);
+  font-weight: 380; letter-spacing: -0.02em; line-height: 1.15;
+}
+.bento-count { font-size: 0.7rem; color: var(--terra-deep); flex: 0 0 auto; }
+.bento-note { margin-top: 0.35rem; font-size: 0.84rem; line-height: 1.5; }
+/* Push the badges to the bottom so cells of different heights still line their
+   badge rows up against the cell floor. */
+.bento-badges { margin-top: auto; padding-top: 1.1rem; }
+
+/* The marquee cell is a rule across the grid, not another panel — no padding,
+   no background, no border of its own. */
+.bento-cell--strip {
+  padding: 0; background: none; border: 0; border-radius: 0;
+}
+.bento-cell--strip:hover { box-shadow: none; }
+
+/* ── Marquee strip ───────────────────────────────────────────────────────────
+   Decorative only — every tool in it is listed and hoverable above. */
+.mq {
+  display: flex; gap: var(--mq-gap); --mq-gap: 1.6rem;
+  margin-top: clamp(0.6rem, 1.5vh, 1.1rem);
+  padding-block: 1.1rem;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+  /* Fade both ends so items enter and leave rather than being sliced off. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.mq-track {
+  flex-shrink: 0; display: flex; align-items: center; gap: var(--mq-gap);
+  list-style: none; min-width: 100%;
+  animation: mq-scroll var(--mq-duration, 60s) linear infinite;
+}
+.mq:hover .mq-track { animation-play-state: paused; }
+.mq-item {
+  display: inline-flex; align-items: center; gap: var(--mq-gap);
+  font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3); white-space: nowrap;
+}
+.mq-sep { color: var(--terra); opacity: 0.55; }
+
+@keyframes mq-scroll {
+  to { transform: translateX(calc(-100% - var(--mq-gap))); }
+}
+
+/* Reduced motion: no animation and no duplicate track — the strip becomes an
+   ordinary wrapped row rather than freezing part-way through a slide. */
+.mq--static { -webkit-mask-image: none; mask-image: none; }
+.mq--static .mq-track { animation: none; flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) {
+  .mq-track { animation: none; flex-wrap: wrap; }
+  .mq { -webkit-mask-image: none; mask-image: none; }
+}
 
 /* Badge rows — used by both the skills matrix and the project cards. */
 .badge-row {
@@ -775,6 +879,16 @@ main > section.section {
   .about-grid { grid-template-columns: 1fr; }
   .about-portrait { max-width: 340px; }
   .case-grid { grid-template-columns: 1fr; }
+  /* Two even columns before the full collapse. A 3-of-12 cell at this width is
+     too narrow to hold a badge row without every badge wrapping to its own line. */
+  .bento-cell { grid-column: span 6; }
+  .bento-cell--strip { grid-column: 1 / -1; }
+  /* With an odd number of domains the last one would sit alone in a half-width
+     cell with a hole beside it. The strip is always the final child, so the
+     last domain is :nth-last-child(2) — widen it only when it lands on an odd
+     position, which is exactly the case where the row can't be filled. This
+     rule is inert when the domain count is even. */
+  .bento-cell:nth-last-child(2):nth-child(odd) { grid-column: 1 / -1; }
   .contact-grid { grid-template-columns: 1fr; }
   /* Preview always on top once the row stacks — flipping order would put the
      image below the text on alternating rows, which reads as a bug. */
@@ -805,6 +919,10 @@ main > section.section {
 
   .domain-grid { grid-template-columns: 1fr; }
   .about-portrait { max-width: 280px; }
+
+  /* Bento collapses to a single column — asymmetry needs width to read as
+     intentional, and at 390px it just makes cells look randomly sized. */
+  .bento-cell { grid-column: 1 / -1; }
 
   /* Timeline collapses to a single column: the rail stays as a spine, the
      sticky year is replaced by an inline label above each entry. */
