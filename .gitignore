@@ -14,6 +14,10 @@ dist-ssr
 .playwright-cli/
 skills-lock.json
 
+# full-resolution originals for public/ images — the site ships the downscaled
+# JPEGs next to them, so the multi-megabyte source files stay out of the repo.
+assets-src/
+
 # source files & internal notes (not for the public repo)
 Profile (1).pdf
 Ganesh_kumar_T_Resume.pdf

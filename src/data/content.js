@@ -369,20 +369,34 @@ export const projects = [
 //   VØID    → 2nd Runner-Up of 90 teams   (was wrongly "Winner")
 //   NxtWave → State 1st, then National Top 10  (was understated as "Finalist")
 //
-// EVERY `year` here is derived from the timestamp embedded in its own LinkedIn
-// activity id, not from memory. That corrected two wrong dates already on the
-// site: Intel was showing May 2025 (actually July) and VØID October (November).
+// `year` is the timestamp embedded in the entry's own LinkedIn activity id, not
+// memory. That corrected two wrong dates already on the site: Intel was showing
+// May 2025 (actually July) and VØID October (November).
+//
+// REVISED 2026-07-31: the post date is only a stand-in for the date of the thing
+// itself, and once the card carries the certificate the gap becomes visible — a
+// reader sees "Mar 2025" beside a certificate that reads "Jul 09 2024". Where the
+// image states its own date, that date wins:
+//   Ybi        → Jul 2024, per the certificate (post was Mar 2025)
+//   HackHustle → Apr 2026, per the event poster (post was Jun 2026)
 //
 // `url` points at the post that proves the entry — the whole section is called
 // "Proof of work", so each card should be checkable in one click. `image` is
 // optional; entries without one render as a compact text card rather than a
 // placeholder block.
+//
+// `doc: true` marks an image that is a document — a certificate, a badge — not a
+// photograph. Those render whole inside the media column instead of being
+// cropped to fill it, because a certificate cropped to a 240px square loses the
+// name and the awarding body, which is the entire reason it's there.
 export const wins = [
   {
     title: 'Python Programming Internship · Ybi Foundation',
     chip: 'Internship',
     detail: 'First real engineering role — Python fundamentals applied to project work rather than coursework.',
-    year: 'Mar 2025',
+    year: 'Jul 2024',
+    image: asset('ybi.webp'),
+    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_i-have-successfully-completed-a-python-programming-activity-7301955798304264192-J_pN',
   },
   {
@@ -412,10 +426,13 @@ export const wins = [
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_openaibuildathontn-openaiacademy-nxtwave-activity-7397542419694751744-2-l3',
   },
   {
-    title: 'Oracle Certified Professional · Java SE',
+    // "Java SE 21 Developer" is the exact credential name on the certificate.
+    title: 'Oracle Certified Professional · Java SE 21',
     chip: 'Certification',
     detail: 'Proctored Oracle certification in core Java and object-oriented design.',
     year: 'Nov 2025',
+    image: asset('oracle.webp'),
+    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-achievement-i-am-thrilled-to-activity-7400199432232775681-_Me0',
   },
   {
@@ -423,6 +440,8 @@ export const wins = [
     chip: 'Consistency',
     detail: '100+ days of daily problem-solving across 2025, after the 50-day badge in October.',
     year: 'Dec 2025',
+    image: asset('leetcode.webp'),
+    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_leetcode-100daysofcode-consistency-activity-7411624906712551424-qu-j',
   },
   {
@@ -430,21 +449,30 @@ export const wins = [
     chip: 'Corporate',
     detail: 'Team MechBusters advanced to Round 2 and the mentor sessions with Caterpillar engineers.',
     year: 'Apr 2026',
+    // The shortlist notice, cropped to the message itself — the phone's status
+    // bar and mail toolbar were the whole reason this couldn't ship before.
+    image: asset('caterpillar.webp'),
+    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_caterpillartechchallenge-mechbusters-top30-activity-7449660247402577920-W3_t',
+  },
+  {
+    title: 'Offline round · HackHustle 2.0',
+    chip: 'Hackathon',
+    detail: '63 teams of 1000+ made it past the proposal screen to the 24-hour offline round.',
+    // The poster dates the event Apr 29–30; the LinkedIn post came later, in June.
+    year: 'Apr 2026',
+    // Event artwork, not a certificate — it fills the media column like a photo.
+    image: asset('hackhustle.webp'),
+    url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackhustle2-hackathon-saveethaengineeringcollege-ugcPost-7474004299845574656-jiJA',
   },
   {
     title: 'Top 106 · Google Solution Challenge 2026',
     chip: 'Global',
     detail: 'Top 106 out of 85,000+ registrations and 6,700+ prototype submissions, with Bias-Lab — an AI fairness auditing platform.',
     year: 'Jun 2026',
+    image: asset('solution.webp'),
+    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_solutionchallenge2026-buildwithai-gdg-activity-7468294267187343360-O6Wo',
-  },
-  {
-    title: 'Offline round · HackHustle 2.0',
-    chip: 'Hackathon',
-    detail: '63 teams of 1000+ made it past the proposal screen to the 24-hour offline round.',
-    year: 'Jun 2026',
-    url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackhustle2-hackathon-saveethaengineeringcollege-ugcPost-7474004299845574656-jiJA',
   },
   {
     title: 'National round · India Innovates 2026',
