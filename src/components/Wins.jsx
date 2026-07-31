@@ -37,13 +37,7 @@ const entries = wins.map((w) => {
     </>
   )
 
-  // Three shapes, not two: a photo card crops to fill, a certificate card shows
-  // the document whole, and an entry with no image drops the media column.
-  const cls = [
-    'wincard',
-    !w.image && 'wincard--bare',
-    w.image && w.doc && 'wincard--doc',
-  ].filter(Boolean).join(' ')
+  const cls = `wincard ${w.image ? '' : 'wincard--bare'}`
 
   return {
     title: w.year,

@@ -37,7 +37,7 @@ export const profile = {
   email: 'ganesh957kumar@gmail.com',
   phone: '+91 78250 83996',
   resumeUrl: asset('Ganesh_Kumar_Resume.pdf'),
-  photo: asset('profile.jpg'),
+  photo: asset('profile.webp'),
   github: 'https://github.com/Ganesh-0509',
   linkedin: 'https://www.linkedin.com/in/ganesh-kumar-957t/',
   leetcode: 'https://leetcode.com/u/24900911/',
@@ -205,7 +205,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['FastAPI', 'React', 'PGVector', 'Gemini', 'ONNX', 'Redis'],
     tone: 'violet',
-    image: asset('jobyn.png'),
+    image: asset('jobyn.webp'),
     repo: 'https://github.com/Ganesh-0509/Jobyn',
     demo: 'https://getjobyn.pages.dev',
     writeup: '',
@@ -254,7 +254,7 @@ export const projects = [
     // scikit-learn here, which wasn't what actually shipped.
     tech: ['React', 'FastAPI', 'XGBoost', 'SHAP', 'Fairlearn', 'Gemini', 'Firestore'],
     tone: 'violet',
-    image: asset('bias-lab.png'),
+    image: asset('bias-lab.webp'),
     repo: 'https://github.com/Ganesh-0509/Bias-Lab',
     // REMOVED 2026-07-28: the Cloud Run revision returns 500. Restore this line
     // only once the URL answers 200 again.
@@ -280,7 +280,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['FastAPI', 'React', 'D3.js', 'Gemini', 'Supabase', 'PostgreSQL'],
     tone: 'sky',
-    image: asset('jananaadi.png'),
+    image: asset('jananaadi.webp'),
     repo: 'https://github.com/Ganesh-0509/JanaNaadi',
     demo: 'https://jana-naadi.vercel.app/',
     writeup: '',
@@ -307,7 +307,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['React', 'FastAPI', 'Gemini', 'Supabase', 'OpenCV', 'Tesseract OCR'],
     tone: 'emerald',
-    image: asset('namma_connect.png'),
+    image: asset('namma_connect.webp'),
     repo: 'https://github.com/Ganesh-0509/smart-resource-allocation',
     // REMOVED 2026-07-28: the Cloud Run service returns 404 — it's gone, not
     // cold. Redeploy (Vercel/Render is more durable for a portfolio) or record
@@ -332,7 +332,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['Python', 'Flask', 'OpenCV', 'Babylon.js', 'NumPy / SciPy'],
     tone: 'amber',
-    image: asset('isro-havk.png'),
+    image: asset('isro-havk.webp'),
     repo: 'https://github.com/Ganesh-0509/ISRO-HAVK-Revolutionizing-Lunar-Terrain-Intelligence-for-Space-Missions',
     demo: '',
     writeup: '',
@@ -353,7 +353,7 @@ export const projects = [
     tags: ['AI/ML', 'Full Stack'],
     tech: ['Next.js', 'TypeScript', 'Gemini', 'Firebase'],
     tone: 'emerald',
-    image: asset('finmate.png'),
+    image: asset('finmate.webp'),
     // Team project — repo lives under teammate Vino's account.
     repo: 'https://github.com/Vino1705/Finmate',
     demo: '',
@@ -385,10 +385,10 @@ export const projects = [
 // optional; entries without one render as a compact text card rather than a
 // placeholder block.
 //
-// `doc: true` marks an image that is a document — a certificate, a badge — not a
-// photograph. Those render whole inside the media column instead of being
-// cropped to fill it, because a certificate cropped to a 240px square loses the
-// name and the awarding body, which is the entire reason it's there.
+// Every `image` is matted rather than cropped — see .wincard-img. There is no
+// per-entry flag for it any more: certificates and photographs get the same
+// frame, because the column reads as one repeating shape down the rail only if
+// it never changes. Add an image, get the frame.
 export const wins = [
   {
     title: 'Python Programming Internship · Ybi Foundation',
@@ -396,7 +396,6 @@ export const wins = [
     detail: 'First real engineering role — Python fundamentals applied to project work rather than coursework.',
     year: 'Jul 2024',
     image: asset('ybi.webp'),
-    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_i-have-successfully-completed-a-python-programming-activity-7301955798304264192-J_pN',
   },
   {
@@ -404,7 +403,7 @@ export const wins = [
     chip: 'National',
     detail: 'Top 12 nationally out of 90+ teams and ₹25,000 for Enterprise360, a multimodal agentic assistant built on Intel OPEA.',
     year: 'Jul 2025',
-    image: asset('win-intel.png'),
+    image: asset('win-intel.webp'),
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-moment-im-excited-to-share-that-activity-7348569256302731264-PcgE',
   },
   {
@@ -414,7 +413,7 @@ export const wins = [
     chip: 'Hackathon',
     detail: 'Top 25 of 90 teams, then 2nd Runner-Up and ₹10,000 for FinMate — a voice-and-OCR finance co-pilot built for Indian spending.',
     year: 'Nov 2025',
-    image: asset('win-vit.jpg'),
+    image: asset('win-vit.webp'),
     url: 'https://www.linkedin.com/posts/vinothini-t-08b4b4274_hackathonjourney-voidv125-teamsparklers-ugcPost-7391125225632890880-XODh',
   },
   {
@@ -422,7 +421,7 @@ export const wins = [
     chip: 'Buildathon',
     detail: 'First place at Tamil Nadu state level with Sahaay-AI, a 48-hour build, then Top 10 at the national round in Delhi.',
     year: 'Nov 2025',
-    image: asset('win-nxtwave.jpg'),
+    image: asset('win-nxtwave.webp'),
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_openaibuildathontn-openaiacademy-nxtwave-activity-7397542419694751744-2-l3',
   },
   {
@@ -432,7 +431,6 @@ export const wins = [
     detail: 'Proctored Oracle certification in core Java and object-oriented design.',
     year: 'Nov 2025',
     image: asset('oracle.webp'),
-    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_proud-achievement-i-am-thrilled-to-activity-7400199432232775681-_Me0',
   },
   {
@@ -441,7 +439,6 @@ export const wins = [
     detail: '100+ days of daily problem-solving across 2025, after the 50-day badge in October.',
     year: 'Dec 2025',
     image: asset('leetcode.webp'),
-    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_leetcode-100daysofcode-consistency-activity-7411624906712551424-qu-j',
   },
   {
@@ -449,10 +446,12 @@ export const wins = [
     chip: 'Corporate',
     detail: 'Team MechBusters advanced to Round 2 and the mentor sessions with Caterpillar engineers.',
     year: 'Apr 2026',
-    // The shortlist notice, cropped to the message itself — the phone's status
-    // bar and mail toolbar were the whole reason this couldn't ship before.
+    // The shortlist notice, cut down to the ribbon and the Top-30 line. Two
+    // things had to go: the phone's status bar and mail toolbar, and the
+    // organisers' sentence naming the event "Caterpillar Tech Challenge 2025",
+    // which contradicted the 2026 in this card's own title. The number that
+    // matters — top 30 from 1500 — is the part that stayed.
     image: asset('caterpillar.webp'),
-    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_caterpillartechchallenge-mechbusters-top30-activity-7449660247402577920-W3_t',
   },
   {
@@ -471,7 +470,6 @@ export const wins = [
     detail: 'Top 106 out of 85,000+ registrations and 6,700+ prototype submissions, with Bias-Lab — an AI fairness auditing platform.',
     year: 'Jun 2026',
     image: asset('solution.webp'),
-    doc: true,
     url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_solutionchallenge2026-buildwithai-gdg-activity-7468294267187343360-O6Wo',
   },
   {
@@ -479,6 +477,7 @@ export const wins = [
     chip: 'National',
     detail: 'Presented JanaNaadi — multilingual civic sentiment across 22+ Indian languages and 28 states — alongside teams from across the country.',
     year: 'Jul 2026',
+    image: asset('india-innovates.webp'),
     url: 'https://www.linkedin.com/posts/tejasree-k-3a59a6328_indiainnovates2026-hackathon-jananaadi-ugcPost-7482695679199518720-m0rJ',
   },
 ]

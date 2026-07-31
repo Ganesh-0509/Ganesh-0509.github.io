@@ -725,7 +725,7 @@ main > section.section {
 
 /* ── Wins ─────────────────────────────────────────────────────────────────── */
 .wincard {
-  display: grid; grid-template-columns: 240px 1fr; align-items: stretch;
+  display: grid; grid-template-columns: 290px 1fr; align-items: stretch;
   overflow: hidden; min-width: 0;
   background: var(--card); border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -736,9 +736,26 @@ main > section.section {
   transform: translateY(-4px); border-color: var(--ochre-rule);
   box-shadow: 0 22px 48px -30px rgba(42, 35, 32, 0.5);
 }
-.wincard-img { position: relative; overflow: hidden; background: var(--paper-2); min-height: 190px; }
-.wincard-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
-.wincard:hover .wincard-img img { transform: scale(1.03); }
+/* Every highlight image is matted, not cropped. These are receipts — a
+   certificate, a shortlist mail, a team on a stage — and the point of each one
+   is the whole frame. `object-fit: cover` filled the column edge to edge but cut
+   the name off a certificate and half the team out of a photo, which is the one
+   thing the image was there to show. Matting them also makes the column read as
+   one repeating frame down the rail instead of ten differently-cropped blocks.
+
+   The 210px cap is what keeps the rows even: a portrait badge left to size
+   itself stretches its card to twice the height of every landscape one. */
+.wincard-img {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--paper-2); min-height: 190px;
+  padding: 0.85rem; border-right: 1px solid var(--rule-soft);
+}
+.wincard-img img {
+  width: auto; height: auto; max-width: 100%; max-height: 210px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(42, 35, 32, 0.14));
+}
 .wincard-body {
   display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
   padding: clamp(1.3rem, 2.2vw, 1.8rem); justify-content: center;
@@ -760,25 +777,6 @@ main > section.section {
    on a certificate worth showing. So they render whole, matted on paper with a
    hairline edge, and the column gets a little more width to keep the type
    legible at thumbnail size. */
-.wincard--doc { grid-template-columns: 290px 1fr; }
-.wincard--doc .wincard-img {
-  display: flex; align-items: center; justify-content: center;
-  background: var(--paper-2);
-  padding: 0.85rem;
-  border-right: 1px solid var(--rule-soft);
-}
-/* The cap is what keeps the row heights even. A portrait badge left to fill the
-   column stretches its card to twice the height of every landscape one, and the
-   timeline stops reading as a single rhythm. */
-.wincard--doc .wincard-img img {
-  width: auto; height: auto;
-  max-width: 100%; max-height: 210px;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(42, 35, 32, 0.14));
-}
-/* The lift already comes from the card; scaling a document under `contain` just
-   makes it drift against its mat. */
-.wincard--doc:hover .wincard-img img { transform: none; }
 
 /* The whole card is the link, so kill the inherited anchor styling and let the
    existing .wincard hover state do the affordance. */
@@ -897,8 +895,7 @@ main > section.section {
   .hero { padding-top: clamp(6rem, 12vh, 8rem); min-height: auto; }
   .hero-term { max-width: 620px; width: 100%; height: clamp(280px, 38vh, 340px); }
   .tl-row { grid-template-columns: 150px 1fr; }
-  .wincard { grid-template-columns: 200px 1fr; }
-  .wincard--doc { grid-template-columns: 240px 1fr; }
+  .wincard { grid-template-columns: 240px 1fr; }
 }
 
 @media (max-width: 900px) {
@@ -960,10 +957,14 @@ main > section.section {
     font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--terra-deep);
   }
-  .wincard, .wincard--doc { grid-template-columns: 1fr; }
-  .wincard-img { aspect-ratio: 16 / 10; min-height: 0; }
-  /* Stacked, the document sits above the text with no column to divide. */
-  .wincard--doc .wincard-img { border-right: 0; border-bottom: 1px solid var(--rule-soft); }
+  .wincard { grid-template-columns: 1fr; }
+  /* Stacked, the frame sits above the text, so the divider moves with it. */
+  .wincard-img {
+    aspect-ratio: 16 / 10; min-height: 0;
+    border-right: 0; border-bottom: 1px solid var(--rule-soft);
+  }
+  /* More room to breathe once the image has the full card width. */
+  .wincard-img img { max-height: 100%; }
   .about-stats { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
 
   .hero-actions { gap: 0.6rem; }
