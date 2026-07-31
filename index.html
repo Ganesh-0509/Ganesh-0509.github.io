@@ -13,19 +13,22 @@
     />
 
     <!-- Open Graph / social preview.
-         Social crawlers require ABSOLUTE URLs, so these point at the deployed
-         GitHub Pages project site. Update the host here if a custom domain is added. -->
+         Social crawlers require ABSOLUTE URLs, so these are the one place in the
+         codebase that hard-codes the host. Everything else is relative and moves
+         on its own. Update all three below together if the host changes again —
+         a custom domain, say. A stale og:image is not a broken image on the
+         page; it is a dead preview card everywhere the link has been shared. -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://ganesh-0509.github.io/ganesh-portfolio-interactive/" />
+    <meta property="og:url" content="https://ganesh-0509.github.io/" />
     <meta property="og:title" content="Ganesh Kumar T — AI Systems &amp; Full-Stack Engineer" />
     <meta
       property="og:description"
       content="Agentic AI · RAG pipelines · production ML infrastructure. Selected work with measured results."
     />
-    <meta property="og:image" content="https://ganesh-0509.github.io/ganesh-portfolio-interactive/profile.jpg" />
+    <meta property="og:image" content="https://ganesh-0509.github.io/profile.jpg" />
     <meta property="og:image:alt" content="Ganesh Kumar T — AI Systems &amp; Full-Stack Engineer" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://ganesh-0509.github.io/ganesh-portfolio-interactive/profile.jpg" />
+    <meta name="twitter:image" content="https://ganesh-0509.github.io/profile.jpg" />
 
     <!-- Fonts: high-contrast editorial serif (display) + neutral sans (body) +
          JetBrains Mono for anything machine-readable (badges, metrics, the
