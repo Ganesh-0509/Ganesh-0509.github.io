@@ -64,6 +64,21 @@ export function navigate(hash) {
   window.location.hash = hash
 }
 
+// Live media-query match. Used to pick a layout, so it has to re-render on
+// change rather than being read once at mount — a window resize across the
+// breakpoint otherwise leaves the wrong component mounted.
+export function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const onChange = () => setMatches(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [query])
+  return matches
+}
+
 // Tracks which section is currently in view for nav highlighting.
 export function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0])

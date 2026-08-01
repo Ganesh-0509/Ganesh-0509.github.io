@@ -1,6 +1,9 @@
+import { useReducedMotion } from 'framer-motion'
 import { wins } from '../data/content'
 import Timeline from './Timeline'
+import StackTimeline from './StackTimeline'
 import Reveal from './Reveal'
+import { useMediaQuery } from '../lib/hooks'
 import { ExternalIcon } from './Icons'
 
 // The wins are already chronological and dated, which is exactly the shape the
@@ -63,6 +66,15 @@ const years = [...new Set(wins.map((w) => w.year.split(' ').pop()))]
 const span = years.length > 1 ? `${years[0]} — ${years[years.length - 1]}` : years[0]
 
 export default function Wins() {
+  // The stack is a desktop affordance. On a phone the rail column collapses and
+  // there's no room to hold a card still, and pinning a section under a touch
+  // scroll just feels stuck — so narrow screens and motion-sensitive visitors
+  // keep the plain scrolling list.
+  const wide = useMediaQuery('(min-width: 1000px)')
+  const short = useMediaQuery('(max-height: 620px)')
+  const reduce = useReducedMotion()
+  const stacked = wide && !short && !reduce
+
   return (
     <section id="wins" className="section wins">
       <div className="container">
@@ -79,7 +91,7 @@ export default function Wins() {
           </p>
         </Reveal>
 
-        <Timeline data={entries} />
+        {stacked ? <StackTimeline data={entries} /> : <Timeline data={entries} />}
       </div>
     </section>
   )

@@ -277,8 +277,12 @@ a.term-line:hover { color: var(--term-accent); text-decoration-color: currentCol
    gets a FLAT band so the alternation reads crisply. Odd → blush paper,
    even → warm cream. Full-bleed: the band spans the viewport while content
    stays inside .container. */
-main > section.section:nth-of-type(odd)  { background: var(--paper); }
-main > section.section:nth-of-type(even) { background: var(--paper-2); }
+/* The band colour is also published as --surface, so anything inside a section
+   that has to paint an opaque patch of "the page" — the stacked timeline's rail
+   column, which hides the entry underneath it — can match its own band without
+   knowing which one it landed on. */
+main > section.section:nth-of-type(odd)  { --surface: var(--paper);   background: var(--surface); }
+main > section.section:nth-of-type(even) { --surface: var(--paper-2); background: var(--surface); }
 main > section.section {
   box-shadow: inset 0 1px 0 var(--rule-soft), inset 0 -1px 0 var(--rule-soft);
 }
@@ -722,6 +726,143 @@ main > section.section {
 .tl-title-inline { display: none; }
 
 .tl-content { min-width: 0; }
+
+/* ── Stacked timeline (desktop) ───────────────────────────────────────────── */
+/* Every row sticks at the same offset under the navbar and stays stuck for the
+   rest of the section, so the entry below scrolls up and COVERS it rather than
+   pushing it off screen. Three numbers drive the whole thing. */
+.stl {
+  position: relative;
+  margin-top: clamp(2.2rem, 5vh, 3rem);
+  /* The deepest a card in the pile can sit above the first one — LIFT × LIFT_MAX
+     from the component. It's added to the resting offset rather than subtracted
+     from it, because the lift runs upward: without the headroom the fourth card
+     onward would come to rest underneath the floating navbar. */
+  --stl-lift-cap: 36px;
+  /* Where a card comes to rest — clear of the navbar, plus that headroom. */
+  --stl-top: calc(clamp(5.4rem, 11vh, 6.8rem) + var(--stl-lift-cap));
+  /* Dwell: the gap between rows in flow, which is scroll distance the pinned
+     card holds still for while the next one climbs the rest of the screen. */
+  --stl-gap: clamp(4.5rem, 10vh, 8rem);
+  /* One height for every card. Uniform is what makes the pile a pile: a short
+     card can't cover a tall one, and the exposed edges wouldn't line up if it
+     could. */
+  --stl-card: clamp(300px, 50vh, 470px);
+}
+
+.stl-row {
+  /* --lift is set per row by the component: each card rests a few pixels higher
+     than the one behind it, which is what leaves the pile's bottom edges
+     showing. */
+  position: sticky; top: calc(var(--stl-top) - var(--lift, 0px));
+  display: grid; grid-template-columns: 190px 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: var(--stl-gap);
+}
+/* Flagged from the component, not `:last-of-type` — the dwell spacer below is
+   also a div, so it, not the last row, is the last of its type. */
+.stl-row--last { margin-bottom: 0; }
+
+/* Every card is a link, including the ones buried in the pile — so the slivers
+   of them showing along the bottom edge were live click targets for entries you
+   can't even read. This is a shield over that band, owned by the card in front:
+   it outranks everything behind it, and the card climbing into place outranks
+   it in turn, so it only ever swallows clicks meant for nothing. */
+.stl-row::after {
+  content: ''; position: absolute; inset: 100% 0 auto 0;
+  height: calc(var(--stl-lift-cap) + 6px);
+}
+
+/* Sticky only holds inside the container, and the container used to end with
+   the last row — so the last card unstuck the instant it arrived. This is its
+   dwell, and nothing else. */
+.stl-tail { height: calc(var(--stl-gap) + 20vh); }
+
+/* ── Left: the rail ── */
+/* Stretches to the full card height, which is what lets it stand in front of
+   the entries behind it — see the band below. */
+.stl-marker { position: relative; padding-top: 2px; }
+/* The band: an opaque strip of the section's own colour, running the card's
+   height AND the gap below it. That's what hides the date and the rail tail of
+   every entry underneath, so only the front card's are ever legible. It has to
+   cover the gap too, or the tails of the whole pile overlap in the space
+   between two cards and print as one dark smear. */
+.stl-marker::after {
+  content: ''; position: absolute; z-index: -1;
+  inset: 0 0 calc(-1 * var(--stl-gap)) 0;
+  background: var(--surface, var(--paper));
+}
+.stl-row--last .stl-marker::after { bottom: 0; }
+/* Runs from under the dot down past the card and through the gap, so the line
+   reaches the next entry instead of stopping dead at the card's bottom edge.
+   The next row sits on a higher z-index, so it covers this tail as it climbs. */
+.stl-marker::before {
+  content: ''; position: absolute; left: 11px; top: 30px;
+  bottom: calc(-1 * var(--stl-gap)); width: 2px; border-radius: 2px;
+  background: linear-gradient(to bottom,
+    var(--ochre-rule) 0%, var(--rule) 18%, var(--rule) 86%, transparent 100%);
+}
+/* Nothing follows the last entry, so its tail would just hang in the gap. */
+.stl-row--last .stl-marker::before { bottom: 0; }
+
+.stl-head { display: flex; align-items: center; gap: 1rem; height: 24px; }
+/* No dim/active pair here: a covered row is genuinely invisible, so the row you
+   can see is always the active one. */
+.stl-dot {
+  flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--card); border: 1px solid var(--ochre-rule);
+  box-shadow: 0 0 0 5px rgba(176, 106, 84, 0.10);
+}
+.stl-dot i {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--terra); display: block;
+}
+.stl-title {
+  font-family: var(--serif); font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 380; letter-spacing: -0.02em; white-space: nowrap;
+  color: var(--terra-deep);
+}
+/* Only for the collapsed narrow layout, which uses the plain list instead. */
+.stl-title-inline { display: none; }
+
+/* ── Right: the card ── */
+.stl-card { min-width: 0; height: var(--stl-card); }
+.stl-card > .wincard {
+  height: 100%;
+  /* Two shadows, and the top one is the important one. Below: lifts the front
+     card off the exposed edges behind it, so the pile reads as a pile rather
+     than a mis-registered print. Above: the card climbing into place casts onto
+     the one it's covering, which is the only thing separating two cards of the
+     same colour at the moment they overlap. */
+  /* Both are tight and light on purpose. Ten cards sit on this footprint, and
+     every one of them casts — a shadow soft enough to look right on a single
+     card stacks ten deep into a grey halo around the whole pile. */
+  box-shadow:
+    0 -14px 22px -20px rgba(74, 44, 34, 0.30),
+    0 16px 28px -24px rgba(74, 44, 34, 0.38);
+}
+/* A card that owns half a screen can carry a wider media column and less
+   matting than a row in a list. */
+.stl-card .wincard { grid-template-columns: 42% 1fr; }
+.stl-card .wincard--bare { grid-template-columns: 1fr; }
+.stl-card .wincard-img { min-height: 0; padding: clamp(0.9rem, 2vh, 1.25rem); }
+.stl-card .wincard-img img { max-height: min(320px, 40vh); }
+.stl-card .wincard-body { gap: 0.7rem; padding: clamp(1.3rem, 2.4vw, 1.9rem); }
+.stl-card .wincard-title { font-size: clamp(1.15rem, 1.85vw, 1.5rem); }
+.stl-card .wincard-desc { font-size: clamp(0.88rem, 0.98vw, 0.98rem); }
+
+/* Below the gate the component isn't rendered at all — this is only so a
+   narrow viewport can never end up with ten cards pinned on top of each other. */
+@media (max-width: 999px) {
+  .stl-row { position: static; grid-template-columns: 1fr; margin-bottom: 2rem; }
+  .stl-marker, .stl-tail { display: none; }
+  .stl-card { height: auto; }
+  .stl-title-inline {
+    display: block; margin-bottom: 0.6rem;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--terra-deep);
+  }
+}
 
 /* ── Wins ─────────────────────────────────────────────────────────────────── */
 .wincard {
