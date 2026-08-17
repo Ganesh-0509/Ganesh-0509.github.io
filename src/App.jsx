@@ -8,6 +8,7 @@ import About from './components/About'
 import Skills from './components/Skills'
 import Work from './components/Work'
 import Wins from './components/Wins'
+import Venture from './components/Venture'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ResumeModal from './components/ResumeModal'
@@ -70,6 +71,7 @@ export default function App() {
             <Skills />
             <Work />
             <Wins />
+            <Venture />
             <Contact onResume={openResume} />
           </>
         )}

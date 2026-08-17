@@ -13,44 +13,17 @@
    ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Pale pink + cream paper, with a light-brown shade */
-  --paper: #f7e9e7;        /* pale blush-pink canvas */
-  --paper-2: #f1e3d3;      /* warm cream — faint sunken fill */
-  --card: #fdf7f4;         /* near-white — raised card fill, reads on both bands */
-  --card-2: #f6ece7;       /* nested fill — inputs, badges */
-  --brown: #cdb59a;        /* light brown / taupe — background washes */
-  --ink: #2a2320;          /* warm near-black — headlines & text */
-  --ink-2: #574b40;        /* secondary text */
-  --ink-3: #6f6356;        /* captions / muted — clears WCAG AA on paper */
-
-  /* The one accent + the one structural line */
-  --terra: #b96a6a;        /* dusty rose — used sparingly, with intent */
-  --terra-deep: #97504f;   /* hover / pressed accent, and ALL small accent text */
-  --ochre: #c79a6a;        /* soft ochre-brown hairline tint */
-  --sage-deep: #5f7050;    /* success / positive state, AA on paper */
-
-  --rule: rgba(42, 35, 32, 0.16);     /* default hairline */
-  --rule-soft: rgba(42, 35, 32, 0.09);
-  --ochre-rule: rgba(199, 154, 106, 0.55);
-
-  /* The terminal is a deliberate dark panel — a code block on paper.
-     Warm ink, not cold black, so it stays on-palette. */
-  --term-bg: #241e1b;
-  --term-bar: #2f2724;
-  --term-text: #e8ded6;
-  --term-dim: #a4968a;
-  --term-accent: #e0a3a0;
-  --term-ok: #a8bf94;
-
-  /* Type */
+  /* Colour lives in theme.css, which owns both sets. What stays here is
+     everything that does NOT change between light and dark: the faces,
+     the easing curve, the measure and the radii. Leaving the old Blush
+     colours in this block would have them tie with [data-theme] on
+     specificity and win on order for anything theme.css missed. */
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-
   --ease: cubic-bezier(0.22, 1, 0.36, 1);   /* smooth, no overshoot */
   --container: 1280px;
   --gutter: clamp(1.25rem, 5vw, 5rem);
-  /* Generous vertical rhythm — ~6rem minimum, so sections breathe */
   --section-pad: clamp(6rem, 13vh, 10rem);
   --radius: 18px;
   --radius-sm: 12px;
@@ -76,9 +49,14 @@ body {
   /* a light-brown wash carried across the whole page, with blush-pink
      glows at opposite corners so the page reads pink AND brown */
   background-image:
-    radial-gradient(70% 55% at 0% 0%, rgba(247, 233, 231, 0.92) 0%, transparent 55%),
-    radial-gradient(70% 55% at 100% 100%, rgba(247, 233, 231, 0.85) 0%, transparent 55%),
-    linear-gradient(158deg, rgba(205, 181, 154, 0.48) 0%, rgba(205, 181, 154, 0.64) 46%, rgba(205, 181, 154, 0.50) 100%);
+    /* Routed through --paper-rgb and --brown-rgb rather than hard-coded blush
+       values. These three washes ARE the page's ground colour at the edges, so
+       leaving them literal meant every palette still had a pink corner and a
+       taupe band no matter what --paper said — the single most misleading kind
+       of bug to review a palette through. */
+    radial-gradient(70% 55% at 0% 0%, rgba(var(--paper-rgb), 0.92) 0%, transparent 55%),
+    radial-gradient(70% 55% at 100% 100%, rgba(var(--paper-rgb), 0.85) 0%, transparent 55%),
+    linear-gradient(158deg, rgba(var(--brown-rgb), 0.48) 0%, rgba(var(--brown-rgb), 0.64) 46%, rgba(var(--brown-rgb), 0.50) 100%);
   color: var(--ink);
   font-family: var(--sans);
   font-weight: 400;

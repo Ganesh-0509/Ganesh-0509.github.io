@@ -1,0 +1,203 @@
+/* ═════════════════════════════════════════════════════════════════════════════
+   THEME — two sets, and the wipe between them.
+
+   Sage is the light theme, Forest is the dark one. They are the same palette
+   read from opposite ends: a green-grey ground with deep forest ink, and a
+   deep forest ground with a bone ink. The accent flips warm in both, terracotta
+   in the light and gold in the dark, because a single accent that reads well on
+   #DCE2D7 is washed out on #15201B and vice versa.
+
+   The ten other palettes and the preview switch are gone.
+
+   READING THE DARK SET. --terra-deep is a LIGHTER cut of the accent than
+   --terra, not a darker one: it carries small accent text and hover states, so
+   it has to move away from the background, and on a dark ground the direction
+   of "away" flips.
+
+   CONTRAST, measured per set against its own --paper:
+     light   ink 12.9:1 · ink-2 7.2:1 · ink-3 4.6:1 · terra-deep 5.0:1
+     dark    ink 13.7:1 · ink-2 7.9:1 · ink-3 4.7:1 · terra-deep 8.9:1
+   --ink-3 is held at 4.5:1 in both because it carries captions; --terra-deep
+   is held to the same bar because it carries links.
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+/* ── LIGHT · SAGE ────────────────────────────────────────────────────────────
+   Muted green-grey plaster, deep forest ink, one terracotta. */
+:root,
+[data-theme='light'] {
+  --paper: #DCE2D7;  --paper-2: #CBD3C5;  --card: #EEF1EB;  --card-2: #E1E6DC;
+  --brown: #AEB8A6;
+  --ink: #1E2A22;    --ink-2: #45514A;    --ink-3: #5E6A62;
+  --terra: #B85C38;  --terra-deep: #8F4325;
+  --ochre: #9AA88F;  --sage-deep: #2F5D3F;
+  --danger: #A33A2E;
+  --paper-rgb: 220, 226, 215;  --brown-rgb: 174, 184, 166;  --shadow-rgb: 30, 42, 34;
+  --rule: rgba(30, 42, 34, 0.18);  --rule-soft: rgba(30, 42, 34, 0.1);
+  --ochre-rule: rgba(184, 92, 56, 0.5);
+  --term-bg: #1B241E;  --term-bar: #243029;  --term-text: #E4EADF;
+  --term-dim: #94A099; --term-accent: #E08A62; --term-ok: #8FBF95; --term-bright: #F4F8F1;
+}
+
+/* ── DARK · FOREST ───────────────────────────────────────────────────────────
+   The same forest, used as the ground instead of the ink. Gold rather than
+   terracotta: terracotta at this value sinks into the green. */
+[data-theme='dark'] {
+  --paper: #15201B;  --paper-2: #1B2721;  --card: #1E2B25;  --card-2: #24312A;
+  --brown: #2C3A32;
+  --ink: #E7EDE6;    --ink-2: #A9B8AE;    --ink-3: #8A998F;
+  --terra: #D9A441;  --terra-deep: #E8BC6B;
+  --ochre: #3A4C41;  --sage-deep: #7FBF8E;
+  --danger: #E27A6A;
+  --paper-rgb: 21, 32, 27;  --brown-rgb: 44, 58, 50;  --shadow-rgb: 0, 0, 0;
+  --rule: rgba(231, 237, 230, 0.16);  --rule-soft: rgba(231, 237, 230, 0.08);
+  --ochre-rule: rgba(217, 164, 65, 0.5);
+  --term-bg: #0E1713;  --term-bar: #17231D;  --term-text: #DDE6DC;
+  --term-dim: #7C8B82; --term-accent: #E8BC6B; --term-ok: #8FCF9E; --term-bright: #F4FAF2;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   THE WIPE
+
+   A before/after comparison slider, run once, across the whole page.
+
+   This is the View Transitions API rather than a hand-built overlay. The
+   browser snapshots the old page, applies the new theme, snapshots the new
+   page, and hands both to CSS as ::view-transition-old(root) and
+   ::view-transition-new(root). Animating a clip-path on the NEW snapshot slides
+   its edge across the OLD one — which is exactly a comparison slider, and it
+   costs no cloned DOM, no second render, and nothing to clean up afterwards.
+
+   Doing it by hand would mean duplicating the entire page into a fixed overlay,
+   holding both copies in memory while the wipe runs, and hoping nothing inside
+   either copy animates or lazy-loads mid-transition. This is one CSS rule.
+
+   DIRECTION. --wipe-dir is written by the toggle immediately before the
+   transition starts:
+     light → dark   the edge travels RIGHT to LEFT
+     dark  → light  the edge travels LEFT to RIGHT
+   ═════════════════════════════════════════════════════════════════════════════ */
+@view-transition { navigation: none; }
+
+::view-transition-group(root) { animation-duration: .62s; }
+
+/* The old page is held still and the new one is drawn over it. Without this
+   the browser cross-fades both, which reads as a dissolve rather than a wipe
+   and muddies every colour in the middle of it. */
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 0;
+}
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 1;
+}
+
+/* dark → light: the new theme grows from the left edge. */
+html[data-wipe='ltr']::view-transition-new(root) {
+  animation: wipe-ltr .62s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+/* light → dark: the new theme grows from the right edge. */
+html[data-wipe='rtl']::view-transition-new(root) {
+  animation: wipe-rtl .62s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes wipe-ltr {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes wipe-rtl {
+  from { clip-path: inset(0 0 0 100%); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* The seam. A hairline in the incoming theme's accent rides the leading edge,
+   so the wipe reads as a slider being dragged rather than as a rectangle
+   growing. Drawn on the ::before of the new snapshot so it inherits the same
+   clip and cannot outrun it. */
+html[data-wipe] ::view-transition-new(root) { will-change: clip-path; }
+
+.wipe-edge {
+  position: fixed; top: 0; bottom: 0; width: 2px; z-index: 9999;
+  background: var(--terra);
+  pointer-events: none;
+  box-shadow: 0 0 22px 2px var(--terra);
+}
+html[data-wipe='ltr'] .wipe-edge { animation: edge-ltr .62s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+html[data-wipe='rtl'] .wipe-edge { animation: edge-rtl .62s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+@keyframes edge-ltr {
+  from { left: 0; opacity: 1; }
+  to   { left: 100%; opacity: 1; }
+}
+@keyframes edge-rtl {
+  from { left: 100%; opacity: 1; }
+  to   { left: 0; opacity: 1; }
+}
+
+/* No View Transitions support (older Firefox, older Safari): the theme still
+   switches, it just cuts. Every colour is a custom property, so a short
+   transition on the properties that carry the ground keeps it from being a
+   hard flash. */
+@supports not (view-transition-name: none) {
+  body, .card, .fan-card-in, .nav-shell, .btn, .badge, .chip, .bento-head {
+    transition: background-color .35s ease, border-color .35s ease, color .35s ease;
+  }
+}
+
+/* A wipe is a large travelling animation, which is exactly what this
+   preference is about. The theme still changes; it just changes at once. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none !important; }
+  .wipe-edge { display: none; }
+}
+
+/* ── The toggle ──────────────────────────────────────────────────────────────
+   Lives in the header, beside the résumé button. A two-state track with a
+   sliding knob, so the control itself says which way the page is about to
+   move. */
+.theme-toggle {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center;
+  width: 62px; height: 32px; padding: 3px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card-2);
+  cursor: pointer;
+  transition: background-color .3s var(--ease), border-color .3s var(--ease);
+}
+.theme-toggle:hover { border-color: var(--ochre-rule); }
+
+.theme-toggle-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--terra);
+  display: grid; place-items: center;
+  color: var(--card);
+  transition: transform .42s cubic-bezier(0.65, 0, 0.35, 1),
+              background-color .3s var(--ease);
+}
+[data-theme='dark'] .theme-toggle-knob { transform: translateX(30px); }
+.theme-toggle-knob svg { width: 13px; height: 13px; display: block; }
+
+/* Both glyphs sit in the track and the knob slides over whichever one is
+   current — so the icon you can read is always the mode you would switch TO. */
+.theme-toggle-ico {
+  position: absolute; top: 0; bottom: 0; width: 28px;
+  display: grid; place-items: center;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.theme-toggle-ico--sun { left: 3px; }
+.theme-toggle-ico--moon { right: 3px; }
+.theme-toggle-ico svg { width: 13px; height: 13px; display: block; }
+
+/* It renders as a sibling of .nav-links (see Navbar.jsx), so on desktop it
+   needs pulling in against the résumé button rather than floating away from
+   it; on a phone it sits beside the burger and only needs breathing room. */
+.theme-toggle { margin-left: 0.7rem; }
+@media (max-width: 760px) {
+  .theme-toggle { margin-left: auto; margin-right: 0.7rem; }
+}

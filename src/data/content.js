@@ -26,6 +26,15 @@ export const profile = {
   headline: 'AI Systems & Full-Stack Engineer',
   // The specialisation, spelled out. Rendered as mono, split on '·'.
   specialisms: ['Agentic AI', 'RAG Pipelines', 'Production ML Infrastructure'],
+  // The hero says three words and gets out of the way. Each drops in
+  // separately, so keep them short and keep them verbs — this is the line a
+  // developer reads before deciding whether to scroll.
+  hook: ['Build.', 'Ship.', 'Measure.'],
+  // Signed across the name plate in the hero. Short — a signature that wraps
+  // stops reading as a signature.
+  signature: 'AI Engineer',
+  // One sentence under the hook. Everything else moved to About.
+  tagline: 'AI systems and full-stack automation — architected, built and shipped end to end.',
   // Two sentences. The first says what I build, the second gives one hard proof.
   // No adjectives, no award inflation — the Highlights section carries placings.
   summary:
@@ -47,8 +56,26 @@ export const about = {
   // Two short lines. Anything longer goes unread — the projects do the talking.
   story: [
     'Third-year AI/ML undergrad at Saveetha Engineering College, Chennai (CGPA 8.2). I ship systems rather than notebooks: retrieval that cites its sources, agents that check their own output, models exported so they actually run somewhere.',
+    'The work runs end to end. I take a product from the schema and the API through the retrieval layer, the model export, the front end and the deploy — then the automation that keeps it running once it is live. No hand-off, no half-built middle layer.',
     'Most of what I know came from building under a deadline — Intel, VIT, the OpenAI × NxtWave buildathon, and Top 106 of 85,000+ at the Google Solution Challenge — plus one agent pipeline reviewed and merged into a company’s open-source product.',
   ],
+  // The venture gets its own block rather than a line in `story`: it is the one
+  // item here that is a running business with a URL someone can open.
+  // Closes the page. By the time someone reaches this they have seen the work
+  // and the numbers, so the line answers the question they are actually left
+  // with rather than pitching at them.
+  venture: {
+    name: 'FreshFrame',
+    role: 'Co-founder · Lead developer',
+    url: 'https://vino1705.github.io/FreshFrame/',
+    // Two questions doing two different jobs. `hook` is the aside that notices
+    // how far someone has scrolled — it earns the ask. `ask` is the question the
+    // studio actually wants answered, so it carries the headline.
+    hook: 'Still here? Then you are wondering how it was built.',
+    ask: 'Need something like this built?',
+    note: 'FreshFrame is the studio I co-founded and build — the site, the stack, and the automation behind the client work. Send a message there and I will get back to you.',
+    cta: 'Message me at FreshFrame',
+  },
   // Numbers that cannot drift: LeetCode is fetched at build time (see
   // scripts/fetch-stats.mjs) and the project count is derived from the array
   // below, so it can never disagree with the Work section again.
@@ -499,4 +526,8 @@ export const navLinks = [
   { id: 'skills', label: 'Stack' },
   { id: 'work', label: 'Work' },
   { id: 'wins', label: 'Highlights' },
+  // Contact belongs in this list, not appended in the Navbar. The bar renders
+  // what it finds here AND observes what it finds here; anything added in the
+  // component alone gets a link with no active state.
+  { id: 'contact', label: 'Contact' },
 ]

@@ -71,12 +71,17 @@
   transition: background-color .4s var(--ease), border-color .4s var(--ease),
               box-shadow .4s var(--ease), padding .4s var(--ease);
 }
+/* Tinted from the theme ground rather than a fixed cream, so the pill reads as
+   the page seen through frosted glass in BOTH themes — the literal
+   rgba(253,247,244,…) it used to carry was a leftover from the old paper
+   palette and stayed pale even on the forest ground. Alpha low enough that
+   content visibly travels under it; the blur is what keeps labels legible. */
 .nav-shell--pill {
-  background: rgba(253, 247, 244, 0.82);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  background: rgba(var(--paper-rgb), 0.55);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
   border-color: var(--rule);
-  box-shadow: 0 14px 40px -22px rgba(42, 35, 32, 0.55);
+  box-shadow: 0 14px 40px -22px rgba(var(--shadow-rgb), 0.55);
 }
 .nav-inner {
   display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
@@ -137,7 +142,7 @@
   gap: clamp(2rem, 4.5vw, 4rem); align-items: center;
   background: var(--card); border: 1px solid var(--rule); border-radius: 24px;
   padding: clamp(1.7rem, 3.5vw, 3rem);
-  box-shadow: 0 30px 70px -50px rgba(42, 35, 32, 0.55);
+  box-shadow: 0 30px 70px -50px rgba(var(--shadow-rgb), 0.55);
 }
 .hero-lede { min-width: 0; }
 
@@ -181,9 +186,9 @@
   position: absolute; inset: 0;
   min-width: 0; min-height: 0;
   display: flex; flex-direction: column;
-  background: var(--term-bg); border: 1px solid rgba(42, 35, 32, 0.35);
+  background: var(--term-bg); border: 1px solid rgba(var(--shadow-rgb), 0.35);
   border-radius: var(--radius); overflow: hidden;
-  box-shadow: 0 30px 60px -35px rgba(42, 35, 32, 0.75);
+  box-shadow: 0 30px 60px -35px rgba(var(--shadow-rgb), 0.75);
   cursor: text;
   /* Idle float — the panel drifts so the hero never reads as a flat mockup.
      transform only, so it stays on the compositor and costs no layout. The
@@ -234,12 +239,12 @@
   from { opacity: 0; transform: translateY(3px); }
   to   { opacity: 1; transform: none; }
 }
-.term-line--head   { color: #fff6ef; font-weight: 700; margin-top: 0.3rem; }
+.term-line--head   { color: var(--term-bright); font-weight: 700; margin-top: 0.3rem; }
 .term-line--dim    { color: var(--term-dim); }
 .term-line--accent { color: var(--term-accent); }
 .term-line--ok     { color: var(--term-ok); }
 .term-line--err    { color: #d98a86; }
-.term-line--cmd    { color: #fff6ef; display: flex; gap: 0.55rem; margin-top: 0.55rem; }
+.term-line--cmd    { color: var(--term-bright); display: flex; gap: 0.55rem; margin-top: 0.55rem; }
 a.term-line { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(232, 222, 214, 0.35); }
 a.term-line:hover { color: var(--term-accent); text-decoration-color: currentColor; }
 
@@ -248,7 +253,7 @@ a.term-line:hover { color: var(--term-accent); text-decoration-color: currentCol
 .term-input-row { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.55rem; }
 .term-input {
   flex: 1; min-width: 0; background: none; border: none; outline: none;
-  color: #fff6ef; font-size: 0.76rem; line-height: 1.75; padding: 0;
+  color: var(--term-bright); font-size: 0.76rem; line-height: 1.75; padding: 0;
   caret-color: var(--term-accent);
 }
 .term-input::placeholder { color: #7b6d64; }
@@ -344,7 +349,7 @@ main > section.section {
   border-radius: var(--radius);
   transition: border-color .4s var(--ease), box-shadow .4s var(--ease);
 }
-.domain:hover { border-color: var(--ochre-rule); box-shadow: 0 18px 40px -30px rgba(42, 35, 32, 0.5); }
+.domain:hover { border-color: var(--ochre-rule); box-shadow: 0 18px 40px -30px rgba(var(--shadow-rgb), 0.5); }
 .domain-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .domain-title { font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 380; }
 .domain-count { font-size: 0.7rem; color: var(--terra-deep); }
@@ -355,24 +360,136 @@ main > section.section {
    so the section has a shape: the domain with the most tools takes the most
    room. `grid-auto-flow: dense` lets a narrow cell backfill a gap a wide one
    leaves, so the block stays packed without hand-placing anything. */
-.bento {
-  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-auto-flow: dense;
-  gap: clamp(0.9rem, 1.8vw, 1.35rem);
+/* The hand.
+   The five domain cards are dealt as an overlapping fan rather than tiled into
+   a grid. Everything below derives from ONE inline number, --i, so the whole
+   effect is a single transform per card and nothing re-renders.
+
+   Ported from the later build and re-tokenised: the card is this theme's
+   --card on --paper, its hairline is --rule, and the lifted state takes
+   --ochre-rule, which is exactly the pair .bento-cell used. The hand belongs to
+   this palette rather than arriving with one of its own. */
+.fan-wrap {
   margin-top: clamp(2.2rem, 5vh, 3rem);
+  /* Room for the lift and the rotation without clipping the outer cards. */
+  padding: clamp(2rem, 5vh, 3.2rem) 0 clamp(1rem, 3vh, 2rem);
+  /* Must stay visible: badge tooltips pop OUTSIDE their card, and any overflow
+     here clips them mid-sentence. The hand is sized to fit the gutter on
+     desktop so there is nothing to scroll; the flattened layout below turns
+     scrolling back on. */
+  overflow: visible;
+  scrollbar-width: none;
 }
-.bento-cell {
-  grid-column: span var(--span, 6);
-  display: flex; flex-direction: column; min-width: 0;
+.fan-wrap::-webkit-scrollbar { display: none; }
+
+.fan {
+  display: flex;
+  /* `safe` matters: with plain `center` a hand wider than the scroll port
+     overflows equally on both sides and the leftmost card can never be
+     reached. `safe` falls back to flex-start the moment it overflows. */
+  justify-content: safe center;
+  list-style: none; padding: 0; margin: 0;
+  min-width: max-content;
+  perspective: 1600px;
+}
+
+.fan-card {
+  /* Signed distance from the middle of the hand, negative left of centre and
+     positive right, which is what makes the fan symmetrical. */
+  --mid: calc((var(--n) - 1) / 2);
+  --d: calc(var(--i) - var(--mid));
+  width: clamp(215px, 19vw, 265px);
+  flex: 0 0 auto;
+  /* Deep enough to read as a dealt hand, shallow enough that every card still
+     shows its title and most of its badges. These carry text, not just art. */
+  margin-left: -3rem;
+  z-index: var(--i);
+  transform-style: preserve-3d;
+}
+.fan-card:first-child { margin-left: 0; }
+
+.fan-card-in {
+  display: flex; flex-direction: column; min-width: 0; height: 100%;
   padding: clamp(1.2rem, 2vw, 1.6rem);
-  background: var(--card); border: 1px solid var(--rule);
+  background: var(--card);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
-  transition: border-color .4s var(--ease), box-shadow .4s var(--ease);
+  box-shadow: 0 18px 40px -30px rgba(var(--shadow-rgb), 0.45);
+  cursor: default;
+  /* The pose: rotate away from centre, then drop the outer cards so the top
+     edges describe an arc rather than a straight line. --push is the spread
+     applied when a sibling is pointed at, and 0 the rest of the time. */
+  --push: 0rem;
+  transform:
+    translateX(var(--push))
+    rotate(calc(var(--d) * 5deg))
+    translateY(calc(abs(var(--d)) * 0.55rem));
+  transform-origin: bottom center;
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease),
+              border-color .45s var(--ease);
 }
-.bento-cell:hover {
+/* Promoted only while the hand is actually being worked. A standing
+   will-change on all five held five compositor layers alive through a page
+   that spends most of its life nowhere near this section. */
+.fan:hover .fan-card-in,
+.fan:focus-within .fan-card-in { will-change: transform; }
+
+/* The hand opens around whichever card is pointed at: the ones before it slide
+   left, the ones after slide right. That is what stops a lifted card's badges
+   and tooltips sitting under its neighbour. */
+.fan-card:has(~ .fan-card:hover) .fan-card-in,
+.fan-card:has(~ .fan-card:focus-within) .fan-card-in { --push: -3.4rem; }
+.fan-card:hover ~ .fan-card .fan-card-in,
+.fan-card:focus-within ~ .fan-card .fan-card-in { --push: 3.4rem; }
+
+/* abs() is recent; without it the outer cards simply do not drop, which is a
+   flatter fan rather than a broken one. */
+@supports not (width: abs(1px)) {
+  .fan-card-in { transform: translateX(var(--push)) rotate(calc(var(--d) * 5deg)); }
+}
+
+/* Lift out of the hand. :focus-within carries the same pose for keyboard
+   users, who otherwise tab into badges hidden under the next card. */
+.fan-card-in:hover,
+.fan-card-in:focus-within {
+  transform: translateY(-1.6rem) scale(1.04);
   border-color: var(--ochre-rule);
-  box-shadow: 0 18px 40px -30px rgba(42, 35, 32, 0.5);
+  box-shadow: 0 30px 60px -32px rgba(var(--shadow-rgb), 0.55);
 }
+/* Raising z-index on the <li>, not the card: a stacking context on the
+   transformed child cannot outrank a later sibling's. */
+.fan-card:hover, .fan-card:focus-within { z-index: 50; }
+
+/* A fan needs width to be legible, and a fan you cannot lift is just a pile.
+   On touch, on narrow screens, and for reduced motion, deal the cards out flat
+   into a scrollable row instead. */
+@media (hover: none), (max-width: 860px), (prefers-reduced-motion: reduce) {
+  .fan-wrap {
+    overflow-x: auto; overflow-y: hidden; padding-top: 0.5rem;
+    /* One card per swipe should land one card per swipe. `proximity` rather
+       than `mandatory`: a flick meaning to travel two cards is allowed to. */
+    scroll-snap-type: x proximity;
+  }
+  .fan { justify-content: flex-start; }
+  .fan-card { margin-left: 0.9rem; z-index: auto; scroll-snap-align: start; }
+  .fan-card:first-child { margin-left: 0; }
+  .fan-card-in { --push: 0rem; transform: none; }
+  .fan-card-in:hover,
+  .fan-card-in:focus-within { transform: translateY(-0.5rem); }
+}
+
+/* On a phone the row runs to the screen edge, not to the text margin. Cut off
+   at the container edge with the scrollbar hidden, the second card reads as a
+   card clipped by a bug; running under the gutter it reads as a row that
+   continues, which is the only thing telling anyone there are five. */
+@media (max-width: 860px) {
+  .fan-wrap {
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
+}
+
 .bento-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .bento-title {
   font-family: var(--serif); font-size: clamp(1.2rem, 2.1vw, 1.55rem);
@@ -383,13 +500,6 @@ main > section.section {
 /* Push the badges to the bottom so cells of different heights still line their
    badge rows up against the cell floor. */
 .bento-badges { margin-top: auto; padding-top: 1.1rem; }
-
-/* The marquee cell is a rule across the grid, not another panel — no padding,
-   no background, no border of its own. */
-.bento-cell--strip {
-  padding: 0; background: none; border: 0; border-radius: 0;
-}
-.bento-cell--strip:hover { box-shadow: none; }
 
 /* ── Marquee strip ───────────────────────────────────────────────────────────
    Decorative only — every tool in it is listed and hoverable above. */
@@ -450,7 +560,7 @@ main > section.section {
 .case:hover {
   transform: translateY(-4px);
   border-color: var(--ochre-rule);
-  box-shadow: 0 22px 48px -30px rgba(42, 35, 32, 0.5);
+  box-shadow: 0 22px 48px -30px rgba(var(--shadow-rgb), 0.5);
 }
 
 /* Faux app-window preview: a tinted chrome bar sits over the screenshot. */
@@ -574,7 +684,7 @@ main > section.section {
   padding: clamp(1.4rem, 2.5vw, 2rem);
   transition: border-color .4s var(--ease), box-shadow .4s var(--ease);
 }
-.prow:hover { border-color: var(--ochre-rule); box-shadow: 0 22px 48px -32px rgba(42, 35, 32, 0.5); }
+.prow:hover { border-color: var(--ochre-rule); box-shadow: 0 22px 48px -32px rgba(var(--shadow-rgb), 0.5); }
 /* Alternate which side the preview sits on. */
 .prow--flip .prow-media { order: 2; }
 
@@ -623,7 +733,7 @@ main > section.section {
   position: absolute; top: 0.85rem; right: 0.85rem; z-index: 2; cursor: pointer;
   width: 2.3rem; height: 2.3rem; border-radius: 50%;
   display: grid; place-items: center;
-  background: rgba(253, 247, 244, 0.94); border: 1px solid var(--rule); color: var(--ink);
+  background: rgba(var(--paper-rgb), 0.94); border: 1px solid var(--rule); color: var(--ink);
   transition: background-color .25s var(--ease), color .25s var(--ease);
 }
 .modal-close:hover { background: var(--ink); color: var(--paper); }
@@ -875,7 +985,7 @@ main > section.section {
 }
 .wincard:hover {
   transform: translateY(-4px); border-color: var(--ochre-rule);
-  box-shadow: 0 22px 48px -30px rgba(42, 35, 32, 0.5);
+  box-shadow: 0 22px 48px -30px rgba(var(--shadow-rgb), 0.5);
 }
 /* Every highlight image is matted, not cropped. These are receipts — a
    certificate, a shortlist mail, a team on a stage — and the point of each one
@@ -895,7 +1005,7 @@ main > section.section {
 .wincard-img img {
   width: auto; height: auto; max-width: 100%; max-height: 210px;
   object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(42, 35, 32, 0.14));
+  filter: drop-shadow(0 6px 14px rgba(var(--shadow-rgb), 0.14));
 }
 .wincard-body {
   display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
@@ -934,6 +1044,75 @@ main > section.section {
 .wincard--link:focus-visible {
   outline: 2px solid var(--terra-deep); outline-offset: 3px;
   border-color: var(--ochre-rule);
+}
+
+/* ── Venture ──────────────────────────────────────────────────────────────── */
+/* Reads as a card the page hands you rather than another band of content, so
+   the one outbound link on the site is visibly a different kind of thing from
+   the sections around it.
+
+   Full width, and the width does work: the ask runs across the top at display
+   scale, the studio name and the scroll-depth aside sit at opposite ends of the
+   eyebrow row, and the note and the button split the footer. Nothing here is a
+   stretched version of the narrow layout. */
+.venture-card {
+  position: relative;
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: clamp(2rem, 5vw, 4rem);
+  overflow: hidden;
+}
+/* Drawn by framer (scaleX 0 → 1), so it wipes in from the left as the card
+   arrives. Fading out to transparent keeps it a sweep rather than a lid. */
+.venture-edge {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--terra), var(--ochre-rule) 55%, transparent);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* Brand at one end, the aside at the other — the row reads as a masthead. */
+.venture-eyebrow {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1.5rem; flex-wrap: wrap;
+  margin-bottom: clamp(1.4rem, 3vh, 2rem);
+}
+.venture-name {
+  font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--terra-deep);
+}
+.venture-aside { font-size: 0.72rem; letter-spacing: 0.04em; }
+
+/* Its own scale rather than .section-title or .display: bigger than a section
+   heading because it is the only question on the page that asks the reader for
+   something, and capped at 22ch so it breaks into two deliberate lines. */
+.venture-ask {
+  font-family: var(--serif); font-weight: 360;
+  font-size: clamp(2.3rem, 5.6vw, 4.4rem);
+  line-height: 1.0; letter-spacing: -0.03em;
+  max-width: 22ch;
+}
+
+.venture-foot {
+  margin-top: clamp(2rem, 5vh, 3.2rem);
+  padding-top: clamp(1.4rem, 3vh, 2rem);
+  border-top: 1px solid var(--rule-soft);
+  display: grid; grid-template-columns: 1fr auto;
+  gap: clamp(1.5rem, 4vw, 3rem); align-items: end;
+}
+.venture-note { max-width: 54ch; font-size: 1.02rem; line-height: 1.68; }
+.venture-cta { padding: 0.95rem 1.9rem; font-size: 0.96rem; }
+/* An external-link glyph should leave, not nudge sideways — so this one travels
+   along its own diagonal. Overrides the shared .btn:hover .arr translateX, and
+   needs the extra class to outrank it. */
+.btn.venture-cta:hover .arr { transform: translate(3px, -3px); }
+
+@media (max-width: 760px) {
+  /* The aside is a desktop flourish; on a phone it competes with the ask for the
+     same two lines of attention, and the ask is the one that matters. */
+  .venture-aside { display: none; }
+  .venture-foot { grid-template-columns: 1fr; align-items: start; }
+  .venture-cta { width: 100%; }
 }
 
 /* ── Contact ──────────────────────────────────────────────────────────────── */
@@ -975,10 +1154,10 @@ main > section.section {
   outline: none; border-color: var(--terra);
   box-shadow: 0 0 0 3px rgba(185, 106, 106, 0.14);
 }
-.field-input--error { border-color: #a94a48; }
+.field-input--error { border-color: var(--danger); }
 .field-input--error:focus { box-shadow: 0 0 0 3px rgba(169, 74, 72, 0.14); }
 .field-error {
-  font-size: 0.82rem; color: #a94a48;
+  font-size: 0.82rem; color: var(--danger);
   animation: term-in .2s var(--ease);
 }
 .field-hint { font-size: 0.85rem; }
@@ -996,17 +1175,35 @@ main > section.section {
 .toast {
   display: grid; grid-template-columns: auto 1fr auto; gap: 0.75rem; align-items: start;
   padding: 0.9rem 1rem;
-  background: var(--card); border: 1px solid var(--rule);
-  border-left: 3px solid var(--terra);
+  background: var(--card);
+  /* Tone is carried by the icon's disc and by the toast's own hairline, not by
+     a stripe down the left edge. The 3px tab it replaces was three times the
+     weight of any other border on this page, and it was doing a job the
+     coloured glyph beside it already did. */
+  border: 1px solid color-mix(in srgb, var(--terra) 45%, var(--rule));
   border-radius: var(--radius-sm);
-  box-shadow: 0 24px 50px -22px rgba(42, 35, 32, 0.6);
+  box-shadow: 0 24px 50px -22px rgba(var(--shadow-rgb), 0.6);
   pointer-events: auto;
 }
-.toast--success { border-left-color: var(--sage-deep); }
-.toast--error { border-left-color: #a94a48; }
-.toast-icon { display: grid; place-items: center; padding-top: 2px; }
-.toast--success .toast-icon { color: var(--sage-deep); }
-.toast--error .toast-icon { color: #a94a48; }
+.toast--success { border-color: color-mix(in srgb, var(--sage-deep) 45%, var(--rule)); }
+.toast--error { border-color: color-mix(in srgb, var(--danger) 45%, var(--rule)); }
+/* A filled disc behind the glyph: the stripe's worth of colour, spent where
+   the eye already goes. color-mix keeps it correct in both themes without a
+   second set of values. */
+.toast-icon {
+  display: grid; place-items: center;
+  width: 1.75rem; height: 1.75rem; border-radius: 50%;
+  color: var(--terra);
+  background: color-mix(in srgb, var(--terra) 16%, transparent);
+}
+.toast--success .toast-icon {
+  color: var(--sage-deep);
+  background: color-mix(in srgb, var(--sage-deep) 16%, transparent);
+}
+.toast--error .toast-icon {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+}
 .toast-copy { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
 .toast-title { font-size: 0.93rem; font-weight: 600; }
 .toast-body { font-size: 0.86rem; color: var(--ink-2); line-height: 1.5; overflow-wrap: anywhere; }
@@ -1043,16 +1240,6 @@ main > section.section {
   .about-grid { grid-template-columns: 1fr; }
   .about-portrait { max-width: 340px; }
   .case-grid { grid-template-columns: 1fr; }
-  /* Two even columns before the full collapse. A 3-of-12 cell at this width is
-     too narrow to hold a badge row without every badge wrapping to its own line. */
-  .bento-cell { grid-column: span 6; }
-  .bento-cell--strip { grid-column: 1 / -1; }
-  /* With an odd number of domains the last one would sit alone in a half-width
-     cell with a hole beside it. The strip is always the final child, so the
-     last domain is :nth-last-child(2) — widen it only when it lands on an odd
-     position, which is exactly the case where the row can't be filled. This
-     rule is inert when the domain count is even. */
-  .bento-cell:nth-last-child(2):nth-child(odd) { grid-column: 1 / -1; }
   .contact-grid { grid-template-columns: 1fr; }
   /* Preview always on top once the row stacks — flipping order would put the
      image below the text on alternating rows, which reads as a bug. */
@@ -1083,10 +1270,6 @@ main > section.section {
 
   .domain-grid { grid-template-columns: 1fr; }
   .about-portrait { max-width: 280px; }
-
-  /* Bento collapses to a single column — asymmetry needs width to read as
-     intentional, and at 390px it just makes cells look randomly sized. */
-  .bento-cell { grid-column: 1 / -1; }
 
   /* Timeline collapses to a single column: the rail stays as a spine, the
      sticky year is replaced by an inline label above each entry. */

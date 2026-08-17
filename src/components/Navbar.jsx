@@ -3,12 +3,15 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { navLinks, profile } from '../data/content'
 import { scrollToId, useActiveSection } from '../lib/hooks'
 import { DownloadIcon } from './Icons'
+import ThemeToggle from './ThemeToggle'
 
 const ids = navLinks.map((l) => l.id)
 
-// Every nav destination, including the two that aren't section anchors in
-// navLinks, so the hover pill can travel across the whole row.
-const items = [...navLinks, { id: 'contact', label: 'Contact' }]
+// One list, and it is the observed list. Contact used to be appended here on
+// top of navLinks, which was harmless when navLinks stopped at Highlights — but
+// content.js lists contact itself now, so the bar rendered it twice. Appending
+// it here also meant it was never OBSERVED, so it could never light up as the
+// active section either. Both problems have the same fix.
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Two Aceternity behaviours, ported to plain CSS + framer-motion (this project
@@ -88,7 +91,7 @@ export default function Navbar({ onResume, onPage = false }) {
             aria-label="Primary"
             onMouseLeave={() => setHovered(null)}
           >
-            {items.map((l, i) => (
+            {navLinks.map((l, i) => (
               <a
                 key={l.id}
                 href={`#${l.id}`}
@@ -118,6 +121,14 @@ export default function Navbar({ onResume, onPage = false }) {
               <DownloadIcon width="16" height="16" /> Resume
             </button>
           </nav>
+
+          {/* A SIBLING of .nav-links, not a child. Below 760px .nav-links
+              becomes the fixed drawer that slides in from the right, so a
+              toggle inside it would be hidden behind the burger — the one
+              control that has to stay reachable without opening a menu. Out
+              here it sits at the right end of the bar on desktop and next to
+              the burger on a phone, with no duplicate markup. */}
+          <ThemeToggle />
 
           <button
             className={`nav-burger ${open ? 'nav-burger--open' : ''}`}

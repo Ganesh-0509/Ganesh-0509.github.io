@@ -10,7 +10,6 @@ dist-ssr
 
 # local tooling / editor state — not part of the site
 .agents/
-.claude/
 .playwright-cli/
 skills-lock.json
 
