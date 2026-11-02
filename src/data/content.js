@@ -507,6 +507,14 @@ export const wins = [
     image: asset('india-innovates.webp'),
     url: 'https://www.linkedin.com/posts/tejasree-k-3a59a6328_indiainnovates2026-hackathon-jananaadi-ugcPost-7482695679199518720-m0rJ',
   },
+  {
+    title: 'Winner (Best AI Agent) · Build with Gemma, GDG VIT',
+    chip: 'Buildathon',
+    detail: 'Winner of the Best AI Agent track ($250 prize) among 150+ teams for Sentinel-Gemma, an autonomous industrial safety agent powered by Google Gemma.',
+    year: 'Aug 2026',
+    image: asset('win-gemma.webp'),
+    url: 'https://www.linkedin.com/posts/ganesh-kumar-957t_activity-7489894890668204032-2vLC',
+  },
 ]
 
 export const socials = [

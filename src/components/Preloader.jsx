@@ -21,21 +21,23 @@ import { motion, useReducedMotion } from 'framer-motion'
 // own entrance overlaps the sweep instead of queuing after it.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Just long enough to register as a deliberate cover, not a flash.
-const HOLD = 380
+// Just long enough to register as a deliberate cover without feeling frozen or stuck.
+const HOLD = 120
 
 // The curve's depth, in vh. The sheet is 100vh + this, so `y: -100%` clears
 // both the body and the lip in one move.
 const LIP = 16
 
-const EASE = [0.76, 0, 0.24, 1]
+// Responsive ease: starts moving immediately on frame 1 without the sluggish flat-start
+// of the previous curve, then decelerates smoothly into place.
+const EASE = [0.22, 1, 0.36, 1]
 
 const sheet = {
   initial: { y: '0%' },
   animate: { y: '0%' },
   exit: {
     y: '-100%',
-    transition: { duration: 1.15, ease: EASE },
+    transition: { duration: 0.68, ease: EASE },
   },
 }
 
@@ -46,7 +48,7 @@ const lip = {
   animate: { scaleY: 1 },
   exit: {
     scaleY: 0,
-    transition: { duration: 1.15, ease: EASE },
+    transition: { duration: 0.68, ease: EASE },
   },
 }
 

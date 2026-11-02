@@ -27,15 +27,14 @@
   /* The lip is wider than the viewport (see below); without this it would
      create a horizontal scrollbar for the duration of the intro. */
   overflow-x: clip;
+  pointer-events: none;
   will-change: transform;
+  transform: translateZ(0);
 }
 .wave-body {
   display: block; height: 100vh; width: 100%;
-  /* Vertical, not radial, and it resolves to exactly var(--ink) well before the
-     bottom edge. A radial gradient left a visible hairline where the body met
-     the lip, because the two elements were landing on fractionally different
-     colours at the join. */
-  background: linear-gradient(180deg, #342c28 0%, var(--ink) 55%);
+  /* Deep forest green gradient matching the theme palette */
+  background: linear-gradient(180deg, #121c15 0%, #1a261e 50%, #1e2a22 100%);
 }
 /* The parabola. An elliptical bottom radius on a strip wider than the viewport
    keeps the curve shallow across the middle and stops the corners turning up
@@ -46,10 +45,11 @@
   /* Overlap the body by a pixel: at fractional device-pixel ratios the two
      blocks can otherwise leave a sub-pixel gap that reads as a seam. */
   margin-top: -1px;
-  background: var(--ink);
+  background: #1e2a22;
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
   transform-origin: top center;
   will-change: transform;
+  filter: drop-shadow(0 14px 28px rgba(19, 29, 22, 0.45));
 }
 
 /* ── Navbar ───────────────────────────────────────────────────────────────── */
