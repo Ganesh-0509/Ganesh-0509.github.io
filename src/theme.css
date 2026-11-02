@@ -36,6 +36,12 @@
   --ochre-rule: rgba(184, 92, 56, 0.5);
   --term-bg: #1B241E;  --term-bar: #243029;  --term-text: #E4EADF;
   --term-dim: #94A099; --term-accent: #E08A62; --term-ok: #8FBF95; --term-bright: #F4F8F1;
+  --curtain-bg: linear-gradient(180deg, #18261E 0%, #1F3026 55%, #24382C 100%);
+  --curtain-lip: #24382C;
+  --curtain-accent: #B85C38;
+  --curtain-text: #E7EDE6;
+  --curtain-sub: #A9B8AE;
+  --curtain-shadow: rgba(18, 28, 22, 0.45);
 }
 
 /* ── DARK · FOREST ───────────────────────────────────────────────────────────
@@ -53,6 +59,12 @@
   --ochre-rule: rgba(217, 164, 65, 0.5);
   --term-bg: #0E1713;  --term-bar: #17231D;  --term-text: #DDE6DC;
   --term-dim: #7C8B82; --term-accent: #E8BC6B; --term-ok: #8FCF9E; --term-bright: #F4FAF2;
+  --curtain-bg: linear-gradient(180deg, #1B2B22 0%, #22372B 55%, #2A4335 100%);
+  --curtain-lip: #2A4335;
+  --curtain-accent: #D9A441;
+  --curtain-text: #F4FAF2;
+  --curtain-sub: #7FBF8E;
+  --curtain-shadow: rgba(0, 0, 0, 0.65);
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════

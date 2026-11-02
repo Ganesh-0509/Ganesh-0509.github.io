@@ -32,9 +32,47 @@
   transform: translateZ(0);
 }
 .wave-body {
+  position: relative;
   display: block; height: 100vh; width: 100%;
-  /* Deep forest green gradient matching the theme palette */
-  background: linear-gradient(180deg, #121c15 0%, #1a261e 50%, #1e2a22 100%);
+  /* Theme-aware green palette: rich forest in light mode, elevated emerald in dark */
+  background: var(--curtain-bg);
+}
+.wave-center {
+  position: absolute;
+  top: 48vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  pointer-events: none;
+  text-align: center;
+  width: 90%;
+  max-width: 480px;
+}
+.wave-monogram {
+  font-family: var(--mono);
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--curtain-text);
+  font-weight: 600;
+}
+.wave-tagline {
+  font-family: var(--sans);
+  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--curtain-sub);
+}
+.wave-bar {
+  margin-top: 0.5rem;
+  width: 48px;
+  height: 2px;
+  background: var(--curtain-accent);
+  border-radius: 999px;
+  opacity: 0.9;
 }
 /* The parabola. An elliptical bottom radius on a strip wider than the viewport
    keeps the curve shallow across the middle and stops the corners turning up
@@ -45,11 +83,12 @@
   /* Overlap the body by a pixel: at fractional device-pixel ratios the two
      blocks can otherwise leave a sub-pixel gap that reads as a seam. */
   margin-top: -1px;
-  background: #1e2a22;
+  background: var(--curtain-lip);
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  border-bottom: 2.5px solid var(--curtain-accent);
   transform-origin: top center;
   will-change: transform;
-  filter: drop-shadow(0 14px 28px rgba(19, 29, 22, 0.45));
+  filter: drop-shadow(0 16px 36px var(--curtain-shadow));
 }
 
 /* ── Navbar ───────────────────────────────────────────────────────────────── */

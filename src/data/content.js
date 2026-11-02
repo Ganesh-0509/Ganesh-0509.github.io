@@ -239,28 +239,25 @@ export const projects = [
     featured: true,
   },
   {
-    title: 'Outreach Intelligence Agent',
+    title: 'Namma Connect',
     problem:
-      'Personalised outreach at volume either reads like a mail-merge or takes an hour per prospect — and an LLM left unchecked will confidently invent facts about a company.',
+      'Grassroots NGOs coordinate volunteers, field reports and crises over WhatsApp threads and spreadsheets, so escalations get lost.',
     architecture:
-      'A four-agent hierarchical pipeline — research, draft, critique, rewrite — with self-reflection loops that route a failed draft back for another pass. Tavily grounds the research step in real sources, Pydantic forces every agent hand-off into valid JSON, and quality gates block anything that fails the checks. Prompt versions and campaign state persist to SQLite.',
+      'Multi-tenant FastAPI backend with an OpenCV + Tesseract OCR stage that classifies bilingual field reports, a skills/proximity/reliability matcher for volunteer dispatch, an SLA escalation timer, and GPS-verified check-ins written to Supabase.',
     blurb:
-      'Four-agent pipeline for grounded company research and personalised outreach — reviewed and merged into Lamatic AgentKit as an official template.',
+      'Multi-tenant NGO operations layer: OCR-classifies Tamil and English field reports, matches volunteers by skill, proximity and reliability, escalates SLA breaches.',
     metrics: [
-      { value: 'Merged', label: 'Into Lamatic AgentKit' },
-      { value: '4', label: 'Agents in pipeline' },
-      { value: 'Self-reflect', label: 'Rewrite routing' },
+      { value: '2', label: 'OCR languages' },
+      { value: 'Multi-tenant', label: 'Isolation model' },
+      // TODO: measure OCR classification accuracy on the held-out field-report set.
     ],
-    tags: ['Agentic AI', 'Open Source'],
-    tech: ['Python', 'FastAPI', 'Claude', 'Tavily', 'Pydantic', 'SQLite'],
-    tone: 'amber',
-    // TODO: no screenshot yet — capture the agent trace / a generated draft.
-    image: '',
-    repo: 'https://github.com/Lamatic/AgentKit/tree/main/kits/personalized-outreach-agent',
+    tags: ['AI/ML', 'Full Stack'],
+    tech: ['React', 'FastAPI', 'Gemini', 'Supabase', 'OpenCV', 'Tesseract OCR'],
+    tone: 'emerald',
+    image: asset('namma_connect.webp'),
+    repo: 'https://github.com/Ganesh-0509/smart-resource-allocation',
     demo: '',
-    // The merged PR is the strongest single link on this site: third-party
-    // review, not a self-reported metric.
-    writeup: 'https://github.com/Lamatic/AgentKit/pull/190',
+    writeup: '',
     featured: true,
   },
   {
@@ -319,28 +316,27 @@ export const projects = [
   // as a dated, LinkedIn-linked entry in `wins`. Add it back as a project the
   // day the repo goes public.
   {
-    title: 'Namma Connect',
+    title: 'Outreach Intelligence Agent',
     problem:
-      'Grassroots NGOs coordinate volunteers, field reports and crises over WhatsApp threads and spreadsheets, so escalations get lost.',
+      'Personalised outreach at volume either reads like a mail-merge or takes an hour per prospect — and an LLM left unchecked will confidently invent facts about a company.',
     architecture:
-      'Multi-tenant FastAPI backend with an OpenCV + Tesseract OCR stage that classifies bilingual field reports, a skills/proximity/reliability matcher for volunteer dispatch, an SLA escalation timer, and GPS-verified check-ins written to Supabase.',
+      'A four-agent hierarchical pipeline — research, draft, critique, rewrite — with self-reflection loops that route a failed draft back for another pass. Tavily grounds the research step in real sources, Pydantic forces every agent hand-off into valid JSON, and quality gates block anything that fails the checks. Prompt versions and campaign state persist to SQLite.',
     blurb:
-      'Multi-tenant NGO operations layer: OCR-classifies Tamil and English field reports, matches volunteers by skill, proximity and reliability, escalates SLA breaches.',
+      'Four-agent pipeline for grounded company research and personalised outreach — reviewed and merged into Lamatic AgentKit as an official template.',
     metrics: [
-      { value: '2', label: 'OCR languages' },
-      { value: 'Multi-tenant', label: 'Isolation model' },
-      // TODO: measure OCR classification accuracy on the held-out field-report set.
+      { value: 'Merged', label: 'Into Lamatic AgentKit' },
+      { value: '4', label: 'Agents in pipeline' },
+      { value: 'Self-reflect', label: 'Rewrite routing' },
     ],
-    tags: ['AI/ML', 'Full Stack'],
-    tech: ['React', 'FastAPI', 'Gemini', 'Supabase', 'OpenCV', 'Tesseract OCR'],
-    tone: 'emerald',
-    image: asset('namma_connect.webp'),
-    repo: 'https://github.com/Ganesh-0509/smart-resource-allocation',
-    // REMOVED 2026-07-28: the Cloud Run service returns 404 — it's gone, not
-    // cold. Redeploy (Vercel/Render is more durable for a portfolio) or record
-    // a 30s screen capture and link that instead.
+    tags: ['Agentic AI', 'Open Source'],
+    tech: ['Python', 'FastAPI', 'Claude', 'Tavily', 'Pydantic', 'SQLite'],
+    tone: 'amber',
+    image: '',
+    repo: 'https://github.com/Lamatic/AgentKit/tree/main/kits/personalized-outreach-agent',
     demo: '',
-    writeup: '',
+    // The merged PR is the strongest single link on this site: third-party
+    // review, not a self-reported metric.
+    writeup: 'https://github.com/Lamatic/AgentKit/pull/190',
     featured: false,
   },
   {

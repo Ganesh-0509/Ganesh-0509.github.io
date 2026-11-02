@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#DCE2D7" />
     <meta name="color-scheme" content="light dark" />
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('gk:theme');
+          var theme = (saved === 'light' || saved === 'dark')
+            ? saved
+            : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
     <title>Ganesh Kumar T — AI Systems &amp; Full-Stack Engineer</title>
     <meta
       name="description"

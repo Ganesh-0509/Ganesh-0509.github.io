@@ -22,7 +22,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Just long enough to register as a deliberate cover without feeling frozen or stuck.
-const HOLD = 220
+const HOLD = 480
 
 // The curve's depth, in vh. The sheet is 100vh + this, so `y: -100%` clears
 // both the body and the lip in one move.
@@ -37,7 +37,7 @@ const sheet = {
   animate: { y: '0%' },
   exit: {
     y: '-100%',
-    transition: { duration: 0.72, ease: EASE },
+    transition: { duration: 0.78, ease: EASE },
   },
 }
 
@@ -48,7 +48,7 @@ const lip = {
   animate: { scaleY: 1 },
   exit: {
     scaleY: 0,
-    transition: { duration: 0.72, ease: EASE },
+    transition: { duration: 0.78, ease: EASE },
   },
 }
 
@@ -71,7 +71,13 @@ export default function Preloader({ onDone }) {
       transition={reduce ? { duration: 0.3 } : undefined}
       aria-hidden="true"
     >
-      <span className="wave-body" />
+      <div className="wave-body">
+        <div className="wave-center">
+          <span className="wave-monogram">/ GANESH</span>
+          <span className="wave-tagline">AI Systems &middot; Full-Stack</span>
+          <span className="wave-bar" />
+        </div>
+      </div>
       <motion.span className="wave-lip" variants={reduce ? undefined : lip} />
     </motion.div>
   )
