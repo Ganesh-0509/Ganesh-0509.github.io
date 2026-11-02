@@ -16,23 +16,8 @@ import ProjectsPage from './components/ProjectsPage'
 import { ToastProvider } from './components/Toast'
 import './App.css'
 
-// A boot screen is charming once and irritating the third time. Remember that
-// it's been shown for this tab, so returning from the projects page or hitting
-// back doesn't replay it. sessionStorage (not localStorage) so a genuine new
-// visit still gets the intro.
-const BOOT_KEY = 'gk:booted'
-
-function alreadyBooted() {
-  try {
-    return sessionStorage.getItem(BOOT_KEY) === '1'
-  } catch {
-    // Private mode / storage disabled — just show the preloader.
-    return false
-  }
-}
-
 export default function App() {
-  const [loaded, setLoaded] = useState(alreadyBooted)
+  const [loaded, setLoaded] = useState(false)
   const [resumeOpen, setResumeOpen] = useState(false)
   const route = useHashRoute()
   useSmoothScroll()
@@ -47,15 +32,10 @@ export default function App() {
     <ToastProvider>
       <a className="skip-link" href="#main">Skip to content</a>
 
-      {/* The preloader is a first-visit thing — skip it on a deep link. */}
+      {/* The preloader runs on initial load / reload, skipped on deep links. */}
       <AnimatePresence>
         {!loaded && !onProjectsPage && (
-          <Preloader
-            onDone={() => {
-              try { sessionStorage.setItem(BOOT_KEY, '1') } catch { /* storage blocked */ }
-              setLoaded(true)
-            }}
-          />
+          <Preloader onDone={() => setLoaded(true)} />
         )}
       </AnimatePresence>
 

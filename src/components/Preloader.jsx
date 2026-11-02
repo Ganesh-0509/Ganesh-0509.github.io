@@ -22,7 +22,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Just long enough to register as a deliberate cover without feeling frozen or stuck.
-const HOLD = 120
+const HOLD = 220
 
 // The curve's depth, in vh. The sheet is 100vh + this, so `y: -100%` clears
 // both the body and the lip in one move.
@@ -37,7 +37,7 @@ const sheet = {
   animate: { y: '0%' },
   exit: {
     y: '-100%',
-    transition: { duration: 0.68, ease: EASE },
+    transition: { duration: 0.72, ease: EASE },
   },
 }
 
@@ -48,7 +48,7 @@ const lip = {
   animate: { scaleY: 1 },
   exit: {
     scaleY: 0,
-    transition: { duration: 0.68, ease: EASE },
+    transition: { duration: 0.72, ease: EASE },
   },
 }
 
